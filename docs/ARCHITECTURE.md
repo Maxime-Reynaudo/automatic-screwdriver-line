@@ -151,6 +151,7 @@ Accepted, and listed so that nobody discovers them the hard way.
 
 - **Timeouts are literals** repeated in each function block and its `Reset`, rather than named constants.
 - **Recipe hard-coded** as initial values of the screw table.
+- **The log line does not show whether a job was completed or aborted.** `FB_LogSink` writes "finished" in both cases; the information is in `JobReport.Completed` for any other sink.
 - **Negative angles lose their sign** in `FB_Spindle` (`ABS`): whether −180° means "unscrew" is an open specification question.
 - **`JobId` restarts at 1 after a cold start**, so de-duplication only holds within one PLC run.
 - **A clock failure stops the machine.** `FB_ReportJob` raises an error when the real-time clock cannot be read, which puts the whole cell in `Error`. Whether a reporting problem should stop production is an open design question.

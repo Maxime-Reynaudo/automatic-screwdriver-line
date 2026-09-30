@@ -72,7 +72,7 @@ fi
 
 echo ""
 echo "Changes to be committed:"
-git diff --cached --stat
+git --no-pager diff --cached --stat
 echo ""
 
 # --- 7. Commit and push -------------------------------------------------

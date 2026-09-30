@@ -95,10 +95,10 @@ The `.project` and `.urp` files are compressed binaries. The `.xml` export and t
 Each screw is traced in the PLC log, and the job ends with a summary line such as:
 
 ```
-Job 1 completed: 5 ok, 0 failed
+Job 1 finished: 5 ok, 0 failed
 ```
 
-A job stopped by the operator is reported as `aborted`, with the screws processed so far.
+A job stopped by the operator is also reported, with the screws processed so far.
 
 **Fault injection**
 
