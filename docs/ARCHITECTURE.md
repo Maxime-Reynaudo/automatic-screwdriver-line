@@ -36,6 +36,7 @@ Three questions drove the design:
 | `PLC_PRG` | Creates every instance, injects dependencies once (`InitPous`), maps function block I/O to the I/O images. Contains no logic. |
 | `FB_JobManager` | Sequences a job. Knows *what* must happen, never *how* a device does it. |
 | `FB_JobSelector` | Walks through the screw recipe. |
+| `FB_UserInterface` | Turns the start and stop requests into single-cycle commands (rising edges). There is no HMI: the requests are written from the CODESYS watch window. |
 | Devices | `FB_Cobot`, `FB_ConveyorElectrical`, `FB_zAxis`, `FB_Spindle`: each drives one piece of equipment and hides its protocol. |
 | Reporting | `FB_ReportJob` aggregates a job into a `JobReport`; sinks decide where it goes. |
 | Core | `FB_FunctionBlock_Base` (error state, reset contract), `Trace` (logging helper), `ErrorCodeToString`. |
@@ -160,6 +161,7 @@ Accepted, and listed so that nobody discovers them the hard way.
 **Scope**
 
 - **Modbus signals are not safety functions.** Emergency stop and safeguarding would go through the robot's safety I/O in a real cell.
+- **No operator panel.** Start and stop are written from the CODESYS watch window. An HMI would only have to drive the two inputs of `FB_UserInterface`.
 - **Simulation only.** No real hardware; the NTP configuration of a physical controller is a commissioning item.
 
 ## 10. Next steps

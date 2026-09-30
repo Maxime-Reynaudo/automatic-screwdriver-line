@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0200">
-  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP21 Patch 5" creationDateTime="2026-09-30T17:02:56.3790076" />
-  <contentHeader name="Automatic_ScrewDriver_Line.project" modificationDateTime="2026-09-30T17:02:44.4882995">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP21 Patch 5" creationDateTime="2026-09-30T18:01:51.6556888" />
+  <contentHeader name="Automatic_ScrewDriver_Line.project" modificationDateTime="2026-09-30T18:01:38.4734835">
     <coordinateInfo>
       <fbd>
         <scaling x="1" y="1" />
@@ -1047,6 +1047,100 @@ Reset := TRUE;
                     </Method>
                   </data>
                   <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="RunJob" ObjectId="51e60925-b383-4e15-b1de-e6afd67af44b">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT _InitDone THEN
+	RETURN;
+END_IF
+
+_ActiveError := CheckErrors();
+_Stop := _UserInterface.IsStopRequired();
+		  
+IF _ActiveError &lt;&gt; ErrorCode.NoError AND _state &lt;&gt; JobState.Reset THEN
+    _state := JobState.Error;
+END_IF
+
+IF _state &lt;&gt; JobState.Reset AND _state &lt;&gt; JobState.Error THEN
+    EnableAll();
+ELSE
+    DisableAll();
+END_IF
+
+CASE _state OF
+	JobState.Reset :
+		IF ResetAll() THEN
+			_state := JobState.Idle;
+		END_IF
+	JobState.Idle:
+		IF _Stop THEN
+			_state := JobState.Reset;
+		ELSIF _zAxis.Retract() THEN
+        	IF _UserInterface.IsStartRequired() THEN
+            _ReportJob.Reset();
+			_ReportJob.JobStart();
+            _state := JobState.ReadingTargetPosition;
+        	END_IF
+    	END_IF
+	JobState.ReadingTargetPosition :
+		IF _JobSelector.ReturnScrew() THEN
+			_state:= JobState.MovingToTargetPosition;
+		ELSE
+			_state := JobState.MovingToBase;
+		END_IF
+	JobState.MovingToTargetPosition :
+		IF _Mover.MoveToPosition(_JobSelector.CurrentScrew.PositionMm) THEN
+			_state:= JobState.MovingZaxisToTool;
+		END_IF
+	JobState.MovingZaxisToTool :
+		    CASE _zAxis.Engage() OF
+        		ActionResult.Done:
+            		_state := JobState.ProcessingTool;
+				ActionResult.Failed:
+            		_ReportJob.FailScrew(_JobSelector.CurrentScrew);
+					_state := JobState.MovingZaxisToBase;
+    		END_CASE
+	JobState.ProcessingTool :
+		IF _Spindle.ProcessTool(_JobSelector.CurrentScrew.AngleDeg) THEN		
+			_ReportJob.SuccessScrew(_JobSelector.CurrentScrew);
+			_state:= JobState.MovingZaxisToBase;
+		END_IF
+	JobState.MovingZaxisToBase :
+		IF _zAxis.Retract() THEN
+			_state:= JobState.ReadingTargetPosition;
+		END_IF
+	JobState.MovingToBase :
+		IF _Mover.MoveToPosition(0)  THEN
+			_state := JobState.Idle;
+			_ReportJob.JobEnd();
+		END_IF
+	JobState.Error :
+		IF _Stop THEN
+			_state := JobState.Reset;
+		END_IF
+END_CASE
+
+// Stop during a job = abort: publish the partial report, then reset every component.
+// The next Start begins a fresh job from the first screw.
+IF _Stop
+   AND _state &lt;&gt; JobState.Idle
+   AND _state &lt;&gt; JobState.Reset
+   AND _state &lt;&gt; JobState.Error THEN
+	_ReportJob.JobAborted();
+	_state := JobState.Reset;
+END_IF
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
                     <Method name="Init" ObjectId="d7ca0b86-6794-4a47-9803-daffb35999bd">
                       <interface>
                         <returnType>
@@ -1190,100 +1284,6 @@ FOR _i := 1 TO UPPER_BOUND(_Diagnosable, 1) DO
         CheckErrors := _Diagnosable[_i].GetError();
     END_IF
 END_FOR</xhtml>
-                        </ST>
-                      </body>
-                      <addData />
-                    </Method>
-                  </data>
-                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
-                    <Method name="RunJob" ObjectId="51e60925-b383-4e15-b1de-e6afd67af44b">
-                      <interface>
-                        <returnType>
-                          <BOOL />
-                        </returnType>
-                      </interface>
-                      <body>
-                        <ST>
-                          <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT _InitDone THEN
-	RETURN;
-END_IF
-
-_ActiveError := CheckErrors();
-_Stop := _UserInterface.IsStopRequired();
-		  
-IF _ActiveError &lt;&gt; ErrorCode.NoError AND _state &lt;&gt; JobState.Reset THEN
-    _state := JobState.Error;
-END_IF
-
-IF _state &lt;&gt; JobState.Reset AND _state &lt;&gt; JobState.Error THEN
-    EnableAll();
-ELSE
-    DisableAll();
-END_IF
-
-CASE _state OF
-	JobState.Reset :
-		IF ResetAll() THEN
-			_state := JobState.Idle;
-		END_IF
-	JobState.Idle:
-		IF _Stop THEN
-			_state := JobState.Reset;
-		ELSIF _zAxis.Retract() THEN
-        	IF _UserInterface.IsStartRequired() THEN
-            _ReportJob.Reset();
-			_ReportJob.JobStart();
-            _state := JobState.ReadingTargetPosition;
-        	END_IF
-    	END_IF
-	JobState.ReadingTargetPosition :
-		IF _JobSelector.ReturnScrew() THEN
-			_state:= JobState.MovingToTargetPosition;
-		ELSE
-			_state := JobState.MovingToBase;
-		END_IF
-	JobState.MovingToTargetPosition :
-		IF _Mover.MoveToPosition(_JobSelector.CurrentScrew.PositionMm) THEN
-			_state:= JobState.MovingZaxisToTool;
-		END_IF
-	JobState.MovingZaxisToTool :
-		    CASE _zAxis.Engage() OF
-        		ActionResult.Done:
-            		_state := JobState.ProcessingTool;
-				ActionResult.Failed:
-            		_ReportJob.FailScrew(_JobSelector.CurrentScrew);
-					_state := JobState.MovingZaxisToBase;
-    		END_CASE
-	JobState.ProcessingTool :
-		IF _Spindle.ProcessTool(_JobSelector.CurrentScrew.AngleDeg) THEN		
-			_ReportJob.SuccessScrew(_JobSelector.CurrentScrew);
-			_state:= JobState.MovingZaxisToBase;
-		END_IF
-	JobState.MovingZaxisToBase :
-		IF _zAxis.Retract() THEN
-			_state:= JobState.ReadingTargetPosition;
-		END_IF
-	JobState.MovingToBase :
-		IF _Mover.MoveToPosition(0)  THEN
-			_state := JobState.Idle;
-			_ReportJob.JobEnd();
-		END_IF
-	JobState.Error :
-		IF _Stop THEN
-			_state := JobState.Reset;
-		END_IF
-END_CASE
-
-// Stop during a job = abort: publish the partial report, then reset every component.
-// The next Start begins a fresh job from the first screw.
-IF _Stop
-   AND _state &lt;&gt; JobState.Idle
-   AND _state &lt;&gt; JobState.Reset
-   AND _state &lt;&gt; JobState.Error THEN
-	_ReportJob.JobAborted();
-	_state := JobState.Reset;
-END_IF
-</xhtml>
                         </ST>
                       </body>
                       <addData />
@@ -3653,12 +3653,12 @@ Trace := TRUE;</xhtml>
               <Folder Name="Job_Handler">
                 <Object Name="FB_JobManager" ObjectId="ab6b24a1-115c-4903-a6b4-976c8399b636">
                   <Object Name="Reset" ObjectId="63fe4d37-25c8-40dc-ad10-2ef6453ad5f8" />
+                  <Object Name="RunJob" ObjectId="51e60925-b383-4e15-b1de-e6afd67af44b" />
                   <Object Name="Init" ObjectId="d7ca0b86-6794-4a47-9803-daffb35999bd" />
                   <Object Name="DisableAll" ObjectId="997eb126-0ce4-4a1b-a3dd-74157243ac39" />
                   <Object Name="EnableAll" ObjectId="63ad21e2-1101-42cb-8c92-a31884fa40d5" />
                   <Object Name="ResetAll" ObjectId="04266275-37f7-4b00-8a3d-02d5507b2310" />
                   <Object Name="CheckErrors" ObjectId="9355f896-5f5c-4300-8cea-015bd956ba3d" />
-                  <Object Name="RunJob" ObjectId="51e60925-b383-4e15-b1de-e6afd67af44b" />
                 </Object>
                 <Object Name="FB_JobSelector" ObjectId="9c1e931b-5792-473d-be29-2f0583139f7b">
                   <Object Name="Reset" ObjectId="cbd08f19-6982-4ef4-bd1a-0a35c7e8ba88" />

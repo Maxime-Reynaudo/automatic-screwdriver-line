@@ -3,7 +3,7 @@
 **PLC ↔ collaborative robot integration in IEC 61131-3 (CODESYS) and Universal Robots PolyScope.**
 
 <!-- Add a screenshot or a short GIF of the cell running, then uncomment:
-![Cell running in simulation: CODESYS WebVisu and URSim](docs/img/demo.gif)
+![Cell running in simulation: CODESYS and URSim](docs/img/demo.gif)
 -->
 
 A small automated screwdriving cell, built end to end as a self-directed engineering exercise: an object-oriented PLC program orchestrates a Universal Robots cobot over Modbus TCP, a pneumatic Z cylinder and a screwdriving spindle, and publishes a report for every job.
@@ -67,7 +67,7 @@ The `.project` and `.urp` files are compressed binaries. The `.xml` export and t
 | PLC runtime | CODESYS Control Win V3 x64 (soft PLC) |
 | Robot simulator | URSim 5.25.2 (PolyScope 5), VirtualBox VM |
 | Network | VirtualBox host-only network, robot at `192.168.56.101` |
-| CODESYS libraries | ModbusTCP, SysTimeRtc, CmpLog, Visualization |
+| CODESYS libraries | ModbusTCP, SysTimeRtc, CmpLog |
 | Tooling | Python 3.8+, Git Bash (for `tools/commit.sh` on Windows) |
 
 ## Running the demo
@@ -90,7 +90,7 @@ The `.project` and `.urp` files are compressed binaries. The `.xml` export and t
 1. Open `plc/Automatic_ScrewDriver_Line.project`.
 2. Check `Machine_Constants.USE_COBOT`: `TRUE` for the cobot, `FALSE` for the simulated linear axis.
 3. Start CODESYS Control Win, log in, download and run.
-4. Open the operator panel at `http://localhost:8080/webvisu.htm` and press **START**.
+4. There is no operator panel: jobs are started from the watch window. Write `TRUE` to `PLC_PRG._UserInterface.StartRequest` (Debug → Write Values, Ctrl+F7). A job starts on the rising edge, so write `FALSE` back before starting the next one. `StopRequest` works the same way.
 
 Each screw is traced in the PLC log, and the job ends with a summary line such as:
 

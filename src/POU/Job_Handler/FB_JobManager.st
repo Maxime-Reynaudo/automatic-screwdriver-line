@@ -28,85 +28,6 @@ Reset := TRUE;
 END_METHOD
 
 
-METHOD Init : BOOL
-VAR_INPUT
-	UserInterface : REFERENCE TO FB_UserInterface;
-	JobSelector : REFERENCE TO FB_JobSelector;
-	Mover : I_Mover;
-	zAxis : REFERENCE TO FB_zAxis;
-	Spindle : REFERENCE TO FB_Spindle;
-	ReportJob : REFERENCE TO FB_ReportJob;
-END_VAR
-
-_UserInterface REF= UserInterface;
-_JobSelector REF= JobSelector;
-_Mover := Mover;
-_zAxis REF= zAxis;
-_Spindle REF= Spindle;
-_ReportJob REF= ReportJob;
-
-// Reseters
-_Reseters[1] := _UserInterface;
-_Reseters[2] := _JobSelector;
-_Reseters[3] := _Mover;
-_Reseters[4] := _zAxis;
-_Reseters[5] := _Spindle;
-_Reseters[6] := _ReportJob;
-
-// Diagnosable
-_Diagnosable[1] := _UserInterface;
-_Diagnosable[2] := _JobSelector;
-_Diagnosable[3] := _Mover;
-_Diagnosable[4] := _zAxis;
-_Diagnosable[5] := _Spindle;
-_Diagnosable[6] := _ReportJob;
-
-_InitDone := TRUE;
-Init := TRUE;
-END_METHOD
-
-
-METHOD DisableAll : BOOL
-
-_SpindleOk := _Spindle.Disable();
-_MoverOk   := _Mover.Disable();
-DisableAll := _SpindleOk AND _MoverOk;
-END_METHOD
-
-
-METHOD EnableAll : BOOL
-
-_SpindleOk := _Spindle.Enable();
-_MoverOk   := _Mover.Enable();
-EnableAll  := _SpindleOk AND _MoverOk;
-END_METHOD
-
-
-METHOD ResetAll : BOOL
-
-ResetAll := TRUE;
-
-FOR _i := 1 TO UPPER_BOUND(_Reseters, 1) DO
-    IF NOT _Reseters[_i].Reset() THEN
-        ResetAll := FALSE;
-    END_IF
-END_FOR
-END_METHOD
-
-
-METHOD CheckErrors : ErrorCode
-
-CheckErrors := ErrorCode.NoError;
-
-FOR _i := 1 TO UPPER_BOUND(_Diagnosable, 1) DO
-    IF _Diagnosable[_i].GetError() <> ErrorCode.NoError
-       AND CheckErrors = ErrorCode.NoError THEN
-        CheckErrors := _Diagnosable[_i].GetError();
-    END_IF
-END_FOR
-END_METHOD
-
-
 METHOD RunJob : BOOL
 
 IF NOT _InitDone THEN
@@ -188,6 +109,85 @@ IF _Stop
 	_ReportJob.JobAborted();
 	_state := JobState.Reset;
 END_IF
+END_METHOD
+
+
+METHOD Init : BOOL
+VAR_INPUT
+	UserInterface : REFERENCE TO FB_UserInterface;
+	JobSelector : REFERENCE TO FB_JobSelector;
+	Mover : I_Mover;
+	zAxis : REFERENCE TO FB_zAxis;
+	Spindle : REFERENCE TO FB_Spindle;
+	ReportJob : REFERENCE TO FB_ReportJob;
+END_VAR
+
+_UserInterface REF= UserInterface;
+_JobSelector REF= JobSelector;
+_Mover := Mover;
+_zAxis REF= zAxis;
+_Spindle REF= Spindle;
+_ReportJob REF= ReportJob;
+
+// Reseters
+_Reseters[1] := _UserInterface;
+_Reseters[2] := _JobSelector;
+_Reseters[3] := _Mover;
+_Reseters[4] := _zAxis;
+_Reseters[5] := _Spindle;
+_Reseters[6] := _ReportJob;
+
+// Diagnosable
+_Diagnosable[1] := _UserInterface;
+_Diagnosable[2] := _JobSelector;
+_Diagnosable[3] := _Mover;
+_Diagnosable[4] := _zAxis;
+_Diagnosable[5] := _Spindle;
+_Diagnosable[6] := _ReportJob;
+
+_InitDone := TRUE;
+Init := TRUE;
+END_METHOD
+
+
+METHOD DisableAll : BOOL
+
+_SpindleOk := _Spindle.Disable();
+_MoverOk   := _Mover.Disable();
+DisableAll := _SpindleOk AND _MoverOk;
+END_METHOD
+
+
+METHOD EnableAll : BOOL
+
+_SpindleOk := _Spindle.Enable();
+_MoverOk   := _Mover.Enable();
+EnableAll  := _SpindleOk AND _MoverOk;
+END_METHOD
+
+
+METHOD ResetAll : BOOL
+
+ResetAll := TRUE;
+
+FOR _i := 1 TO UPPER_BOUND(_Reseters, 1) DO
+    IF NOT _Reseters[_i].Reset() THEN
+        ResetAll := FALSE;
+    END_IF
+END_FOR
+END_METHOD
+
+
+METHOD CheckErrors : ErrorCode
+
+CheckErrors := ErrorCode.NoError;
+
+FOR _i := 1 TO UPPER_BOUND(_Diagnosable, 1) DO
+    IF _Diagnosable[_i].GetError() <> ErrorCode.NoError
+       AND CheckErrors = ErrorCode.NoError THEN
+        CheckErrors := _Diagnosable[_i].GetError();
+    END_IF
+END_FOR
 END_METHOD
 
 END_FUNCTION_BLOCK
