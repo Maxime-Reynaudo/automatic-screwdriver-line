@@ -1,0 +1,34 @@
+# CODESYS temporary files and backups
+*.~u
+*.~cp
+*.bak
+
+# CODESYS user options (contain the Windows user and machine names)
+*.opt
+
+# CODESYS compile output and caches
+_CompileInfo/
+compileinfo/
+*.compileinfo
+*.precompilecache
+
+# CODESYS simulation / boot files
+*.bootinfo
+*.bootinfo_guids
+
+# IDE user and session settings
+*.user
+*.suo
+.vscode/
+
+# Manual backups (ScrewLineProgram.urp.old, ...)
+*.old
+*.old.*
+
+# Python
+__pycache__/
+
+# Operating system files
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,9 @@
+// Generated from Automatic_ScrewDriver_Line.xml by tools/export_st.py - do not edit.
+// The CODESYS project is the source of truth.
+
+TYPE Screw :
+STRUCT
+	PositionMm : REAL;   // in mm
+	AngleDeg : DINT;   // in °
+END_STRUCT
+END_TYPE

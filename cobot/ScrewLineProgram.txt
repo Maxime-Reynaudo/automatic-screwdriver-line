@@ -1,0 +1,20 @@
+ Program
+   Variables Setup
+   Robot Program
+     Set DO[1]=Off
+     Wait read_port_bit(16)  and read_port_bit(18)
+     SetPosition≔read_port_register(128)
+     TargPosition≔SetPosition/10000.0
+     TargPose≔pose_trans(ScrewLine_const, p[0,TargPosition, 0, 0, 0, 0])
+     MoveL
+       TargPose
+     Set DO[1]=On
+     Wait read_port_bit(16)≟ False 
+     Set DO[1]=Off
+   Thread_1
+     write_port_register(129, read_port_register(128))
+     Heartbeat≔Heartbeat+1
+     If Heartbeat>1000
+       Heartbeat≔0
+     write_port_register(130, Heartbeat)
+     Wait: 0.05

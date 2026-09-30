@@ -1,0 +1,79 @@
+def ScrewLineProgram():
+  global _hidden_verificationVariable=0
+  set_target_payload(1.000000, [0.000000, 0.000000, 0.000000], [0.001539, 0.001539, 0.001539, 0.000000, 0.000000, 0.000000])
+  tool_wrench_limit_disable()
+  set_gravity([0.0, 0.0, 9.82])
+  motion_version_set(2)
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_safety_mode_transition_hardness(1)
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  set_tcp(p[0.0,0.0,0.1,0.0,0.0,0.0])
+  global ScrewLine=p[-0.29348555441608193,-0.02477784365997816,0.6626203819691683,-7.960175580934424E-12,-9.877695338714923E-12,1.784968130992388]
+  step_count_fb46c269_1d6c_49d3_aa4d_f39ab8753cf5 = 0.0
+  thread Step_Counter_Thread_f2a0ad8d_3c0f_4cef_850a_22fc91816601():
+    while (True):
+      step_count_fb46c269_1d6c_49d3_aa4d_f39ab8753cf5 = step_count_fb46c269_1d6c_49d3_aa4d_f39ab8753cf5 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_f2a0ad8d_3c0f_4cef_850a_22fc91816601()
+  global Heartbeat=0
+  global SetPosition=0
+  global TargPose=p[-0.29348555441608193,-0.02477784365997816,0.6626203819691683,-7.960175580934424E-12,-9.877695338714923E-12,1.784968130992388]
+  global TargPosition=0
+  $ 13 "Thread_1"
+  thread Thread_1():
+    while (True):
+      $ 14 "write_port_register(129, read_port_register(128))"
+      write_port_register(129, read_port_register(128))
+      $ 15 "Heartbeat≔Heartbeat+1"
+      global Heartbeat=Heartbeat+1
+      $ 16 "If Heartbeat>1000"
+      if (Heartbeat>1000):
+        $ 17 "Heartbeat≔0"
+        global Heartbeat=0
+      end
+      $ 18 "write_port_register(130, Heartbeat)"
+      write_port_register(130, Heartbeat)
+      $ 19 "Wait: 0.05"
+      sleep(0.05)
+    end
+  end
+  threadId_Thread_1 = run Thread_1()
+  while (True):
+    $ 2 "Robot Program"
+    $ 3 "Set DO[1]=Off"
+    set_standard_digital_out(1, False)
+    $ 4 "Wait read_port_bit(16)  and read_port_bit(18)"
+    while (not( read_port_bit (16)   and  read_port_bit(18))):
+      sync()
+    end
+    $ 5 "SetPosition≔read_port_register(128)"
+    global SetPosition= read_port_register (128)
+    $ 6 "TargPosition≔SetPosition/10000.0"
+    global TargPosition=SetPosition/10000.0
+    $ 7 "TargPose≔pose_trans(ScrewLine_const, p[0,TargPosition, 0, 0, 0, 0])"
+    global TargPose= pose_trans (p[-0.29348555441608193,-0.02477784365997816,0.6626203819691683,-7.960175580934424E-12,-9.877695338714923E-12,1.784968130992388], p[0,TargPosition, 0, 0, 0, 0])
+    $ 8 "MoveL"
+    $ 9 "TargPose" "breakAfter"
+    movel(TargPose, a=1.2, v=0.25)
+    $ 10 "Set DO[1]=On"
+    set_standard_digital_out(1, True)
+    $ 11 "Wait read_port_bit(16)≟ False "
+    while (not( read_port_bit (16) ==   False  )):
+      sync()
+    end
+    $ 12 "Set DO[1]=Off"
+    set_standard_digital_out(1, False)
+  end
+end

@@ -1,0 +1,14 @@
+# Normalise line endings of text files in the repository.
+* text=auto
+
+# Shell scripts must keep LF endings, even when checked out on Windows.
+*.sh text eol=lf
+
+# Compressed binaries: no line-ending conversion, no textual diff.
+*.project      binary
+*.urp          binary
+*.installation binary
+
+# GitHub maps .st to Smalltalk by default. Structured Text is closest to
+# Pascal, which gives correct highlighting and a correct language bar.
+*.st linguist-language=Pascal

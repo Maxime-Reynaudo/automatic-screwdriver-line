@@ -1,0 +1,3766 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://www.plcopen.org/xml/tc6_0200">
+  <fileHeader companyName="" productName="CODESYS" productVersion="CODESYS V3.5 SP21 Patch 5" creationDateTime="2026-09-30T17:02:56.3790076" />
+  <contentHeader name="Automatic_ScrewDriver_Line.project" modificationDateTime="2026-09-30T17:02:44.4882995">
+    <coordinateInfo>
+      <fbd>
+        <scaling x="1" y="1" />
+      </fbd>
+      <ld>
+        <scaling x="1" y="1" />
+      </ld>
+      <sfc>
+        <scaling x="1" y="1" />
+      </sfc>
+    </coordinateInfo>
+    <addData>
+      <data name="http://www.3s-software.com/plcopenxml/projectinformation" handleUnknown="implementation">
+        <ProjectInformation />
+      </data>
+    </addData>
+  </contentHeader>
+  <types>
+    <dataTypes />
+    <pous />
+  </types>
+  <instances>
+    <configurations>
+      <configuration name="Device">
+        <resource name="Application">
+          <task name="MainTask" interval="PT0.05S" priority="15">
+            <pouInstance name="PLC_PRG" typeName="">
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+              </documentation>
+            </pouInstance>
+            <addData>
+              <data name="http://www.3s-software.com/plcopenxml/tasksettings" handleUnknown="implementation">
+                <TaskSettings KindOfTask="Cyclic" Interval="t#50ms" IntervalUnit="ms" WithinSPSTimeSlicing="true">
+                  <Watchdog Enabled="false" TimeUnit="ms" Sensitivity="1" />
+                </TaskSettings>
+              </data>
+              <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                <ObjectId>92a9c841-26fa-439d-97a9-1157e3fe3eff</ObjectId>
+              </data>
+            </addData>
+          </task>
+          <globalVars name="IO_Simulation">
+            <variable name="MoverEnable">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Mover
+ Outputs: PLC to Machine</xhtml>
+              </documentation>
+            </variable>
+            <variable name="MoverExecuteFor">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="MoverExecuteBac">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="MoverActPos">
+              <type>
+                <REAL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Inputs: Machine to PLC</xhtml>
+              </documentation>
+            </variable>
+            <variable name="MoverReady">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="zValve">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Z Axis
+ Outputs: PLC to Machine</xhtml>
+              </documentation>
+            </variable>
+            <variable name="zDown">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Inputs: Machine to PLC</xhtml>
+              </documentation>
+            </variable>
+            <variable name="ScrewEngaged">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="ScrewReleased">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="SpindleEnable">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Spindle
+ Outputs: PLC to Machine</xhtml>
+              </documentation>
+            </variable>
+            <variable name="SpindleExecute">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="SpindleExecuteTime">
+              <type>
+                <TIME />
+              </type>
+            </variable>
+            <variable name="SpindleReady">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Inputs: Machine to PLC</xhtml>
+              </documentation>
+            </variable>
+            <variable name="SpindleDone">
+              <type>
+                <BOOL />
+              </type>
+            </variable>
+            <variable name="SimFail_ScrewEngaged">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> Z axis rises but the bit never engages the screw</xhtml>
+              </documentation>
+            </variable>
+            <variable name="SimFail_ScrewReleased">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> bit stays stuck in the screw head</xhtml>
+              </documentation>
+            </variable>
+            <variable name="SimFail_SpindleDone">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> spindle never reports completion</xhtml>
+              </documentation>
+            </variable>
+            <variable name="SimFail_MoverReady">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> drive never confirms torque</xhtml>
+              </documentation>
+            </variable>
+            <variable name="SimFail_MoverBlocked">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml"> axis is commanded but does not move</xhtml>
+              </documentation>
+            </variable>
+            <addData>
+              <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                <Attributes>
+                  <Attribute Name="qualified_only" Value="" />
+                </Attributes>
+              </data>
+              <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                <ObjectId>8e6e23dc-8c7b-4975-a793-8c3597d6796e</ObjectId>
+              </data>
+            </addData>
+          </globalVars>
+          <globalVars name="IO_Cobot">
+            <variable name="Cmd_Enable">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">Type Modbus: coil, Address: 18</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Cmd_Start">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">Type Modbus: coil, Address: 16</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Cmd_TargetPos01mm">
+              <type>
+                <WORD />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">Type Modbus: register, Address: 128, unit 0.1mm (to keep .1mm resolution from Position)</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Sts_Done">
+              <type>
+                <BOOL />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">Type Modbus: coil, Address: 17</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Sts_TargetPosEcho01mm">
+              <type>
+                <WORD />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">Type Modbus: register, Address: 129</xhtml>
+              </documentation>
+            </variable>
+            <variable name="Sts_Heartbeat">
+              <type>
+                <WORD />
+              </type>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">Type Modbus: register, Address: 130</xhtml>
+              </documentation>
+            </variable>
+            <addData>
+              <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                <Attributes>
+                  <Attribute Name="qualified_only" Value="" />
+                </Attributes>
+              </data>
+              <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                <ObjectId>944d4228-f282-433d-aae0-668553c7039c</ObjectId>
+              </data>
+            </addData>
+          </globalVars>
+          <globalVars name="Machine_Constants" constant="true">
+            <variable name="TOOL_SPEED">
+              <type>
+                <DINT />
+              </type>
+              <initialValue>
+                <simpleValue value="60" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">Speed of the spindle in deg/s</xhtml>
+              </documentation>
+            </variable>
+            <variable name="USE_COBOT">
+              <type>
+                <BOOL />
+              </type>
+              <initialValue>
+                <simpleValue value="TRUE" />
+              </initialValue>
+              <documentation>
+                <xhtml xmlns="http://www.w3.org/1999/xhtml">If FALSE then the conveyor is used instead</xhtml>
+              </documentation>
+            </variable>
+            <variable name="LOG_COMPONENT_NAME">
+              <type>
+                <string />
+              </type>
+              <initialValue>
+                <simpleValue value="'ScrewDriverLine'" />
+              </initialValue>
+            </variable>
+            <addData>
+              <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                <Attributes>
+                  <Attribute Name="qualified_only" Value="" />
+                </Attributes>
+              </data>
+              <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                <ObjectId>c32908f8-03b3-4382-b0af-5fa6b655d859</ObjectId>
+              </data>
+            </addData>
+          </globalVars>
+          <addData>
+            <data name="http://www.3s-software.com/plcopenxml/datatype" handleUnknown="implementation">
+              <dataType name="JobState">
+                <baseType>
+                  <enum>
+                    <values>
+                      <value name="Idle" value="1" />
+                      <value name="Reset" />
+                      <value name="ReadingTargetPosition" />
+                      <value name="MovingToTargetPosition" />
+                      <value name="MovingToBase" />
+                      <value name="MovingZaxisToTool" />
+                      <value name="ProcessingTool" />
+                      <value name="MovingZaxisToBase" />
+                      <value name="Error" />
+                    </values>
+                  </enum>
+                </baseType>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                    <Attributes>
+                      <Attribute Name="qualified_only" Value="" />
+                      <Attribute Name="strict" Value="" />
+                    </Attributes>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>071466ac-fe42-4c23-89f7-87ec700cf39a</ObjectId>
+                  </data>
+                </addData>
+              </dataType>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/datatype" handleUnknown="implementation">
+              <dataType name="Screw">
+                <baseType>
+                  <struct>
+                    <variable name="PositionMm">
+                      <type>
+                        <REAL />
+                      </type>
+                      <documentation>
+                        <xhtml xmlns="http://www.w3.org/1999/xhtml"> in mm</xhtml>
+                      </documentation>
+                    </variable>
+                    <variable name="AngleDeg">
+                      <type>
+                        <DINT />
+                      </type>
+                      <documentation>
+                        <xhtml xmlns="http://www.w3.org/1999/xhtml"> in °</xhtml>
+                      </documentation>
+                    </variable>
+                  </struct>
+                </baseType>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>495e2ff8-decc-49db-a2e6-51cebb6007db</ObjectId>
+                  </data>
+                </addData>
+              </dataType>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/datatype" handleUnknown="implementation">
+              <dataType name="ErrorCode">
+                <baseType>
+                  <enum>
+                    <values>
+                      <value name="NoError" value="0" />
+                      <value name="EnablementError" />
+                      <value name="ScrewNotReleased" />
+                      <value name="TargetNotReached" />
+                      <value name="SpindleError" />
+                      <value name="CobotNotConnected" />
+                      <value name="CobotMovementNotReached" />
+                      <value name="RtcNotAvailable" />
+                    </values>
+                  </enum>
+                </baseType>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                    <Attributes>
+                      <Attribute Name="qualified_only" Value="" />
+                      <Attribute Name="strict" Value="" />
+                    </Attributes>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>a155c2e2-1bc8-4772-8ae0-3cb89ef4cdf5</ObjectId>
+                  </data>
+                </addData>
+              </dataType>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/datatype" handleUnknown="implementation">
+              <dataType name="ActionResult">
+                <baseType>
+                  <enum>
+                    <values>
+                      <value name="Busy" value="1" />
+                      <value name="Done" />
+                      <value name="Failed" />
+                    </values>
+                  </enum>
+                </baseType>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                    <Attributes>
+                      <Attribute Name="qualified_only" Value="" />
+                      <Attribute Name="strict" Value="" />
+                    </Attributes>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>0160df29-0768-4498-9ef7-f91f43b4e2f4</ObjectId>
+                  </data>
+                </addData>
+              </dataType>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/datatype" handleUnknown="implementation">
+              <dataType name="MoverState">
+                <baseType>
+                  <enum>
+                    <values>
+                      <value name="Idle" value="0" />
+                      <value name="WaitingEcho" />
+                      <value name="Moving" />
+                      <value name="WaitingDoneReleased" />
+                    </values>
+                  </enum>
+                </baseType>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                    <Attributes>
+                      <Attribute Name="qualified_only" Value="" />
+                      <Attribute Name="strict" Value="" />
+                    </Attributes>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>adcfd35c-2cfe-4a43-9c93-e03cacdfd834</ObjectId>
+                  </data>
+                </addData>
+              </dataType>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/datatype" handleUnknown="implementation">
+              <dataType name="JobReport">
+                <baseType>
+                  <struct>
+                    <variable name="JobId">
+                      <type>
+                        <UDINT />
+                      </type>
+                    </variable>
+                    <variable name="StartedAt">
+                      <type>
+                        <DT />
+                      </type>
+                    </variable>
+                    <variable name="FinishedAt">
+                      <type>
+                        <DT />
+                      </type>
+                    </variable>
+                    <variable name="ScrewsOk">
+                      <type>
+                        <INT />
+                      </type>
+                    </variable>
+                    <variable name="ScrewsFailed">
+                      <type>
+                        <INT />
+                      </type>
+                    </variable>
+                    <variable name="FailedScrews">
+                      <type>
+                        <derived name="ScrewList" />
+                      </type>
+                    </variable>
+                    <variable name="Completed">
+                      <type>
+                        <BOOL />
+                      </type>
+                      <documentation>
+                        <xhtml xmlns="http://www.w3.org/1999/xhtml"> TRUE = all screws processed, FALSE = aborted by operator</xhtml>
+                      </documentation>
+                    </variable>
+                  </struct>
+                </baseType>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>4ca4f405-5ed1-4052-8598-7d774caf68a1</ObjectId>
+                  </data>
+                </addData>
+              </dataType>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/datatype" handleUnknown="implementation">
+              <dataType name="ScrewList">
+                <baseType>
+                  <array>
+                    <dimension lower="1" upper="5" />
+                    <baseType>
+                      <derived name="Screw" />
+                    </baseType>
+                  </array>
+                </baseType>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>a5990c35-9050-434b-9f56-c1f04826e5dc</ObjectId>
+                  </data>
+                </addData>
+              </dataType>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+              <Interface name="I_Actuator" ObjectId="f8ec156e-3ce9-4ba0-a8d7-e940f68973cf">
+                <Methods>
+                  <Method name="Enable" ObjectId="269813ba-515d-490c-97ed-ee0e76e75812">
+                    <interface>
+                      <returnType>
+                        <BOOL />
+                      </returnType>
+                    </interface>
+                    <addData />
+                  </Method>
+                  <Method name="Disable" ObjectId="70bc2f0a-0f49-4339-81aa-d0447048fd3e">
+                    <interface>
+                      <returnType>
+                        <BOOL />
+                      </returnType>
+                    </interface>
+                    <addData />
+                  </Method>
+                </Methods>
+                <addData />
+              </Interface>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+              <Interface name="I_Mover" ObjectId="ad8c6094-07c3-4656-a342-2c1e333b6b84">
+                <Methods>
+                  <Method name="MoveToPosition" ObjectId="876de298-6e06-47a2-98d4-7ec2e158635c">
+                    <interface>
+                      <returnType>
+                        <BOOL />
+                      </returnType>
+                      <inputVars>
+                        <variable name="Position">
+                          <type>
+                            <REAL />
+                          </type>
+                        </variable>
+                      </inputVars>
+                    </interface>
+                    <addData />
+                  </Method>
+                </Methods>
+                <Inheritance>
+                  <Extends>I_Device</Extends>
+                </Inheritance>
+                <addData />
+              </Interface>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+              <Interface name="I_Tool" ObjectId="bda6e85b-d6ef-4775-8b48-deaba307d471">
+                <Methods>
+                  <Method name="ProcessTool" ObjectId="ab27b7eb-6cfb-4fc1-a2e1-d2cea6c20d07">
+                    <interface>
+                      <returnType>
+                        <BOOL />
+                      </returnType>
+                      <inputVars>
+                        <variable name="Angle">
+                          <type>
+                            <DINT />
+                          </type>
+                        </variable>
+                      </inputVars>
+                    </interface>
+                    <addData />
+                  </Method>
+                </Methods>
+                <Inheritance>
+                  <Extends>I_Device</Extends>
+                </Inheritance>
+                <addData />
+              </Interface>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+              <Interface name="I_Resettable" ObjectId="0c2b962b-c6c2-4c3a-a46a-9d0fd4dc31ed">
+                <Methods>
+                  <Method name="Reset" ObjectId="eb5a17be-41b4-417a-af3c-f8192b06e9d8">
+                    <interface>
+                      <returnType>
+                        <BOOL />
+                      </returnType>
+                    </interface>
+                    <addData />
+                  </Method>
+                </Methods>
+                <addData />
+              </Interface>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+              <Interface name="I_Diagnosable" ObjectId="ac3b8d12-ea7c-4c6b-bd25-ef3baa2347b6">
+                <Methods>
+                  <Method name="GetError" ObjectId="09128ea1-d8fc-44d1-a13e-22acd308a866">
+                    <interface>
+                      <returnType>
+                        <derived name="ErrorCode" />
+                      </returnType>
+                    </interface>
+                    <addData />
+                  </Method>
+                  <Method name="ClearError" ObjectId="70d36d2c-9183-47e4-9a79-16e178518588">
+                    <interface>
+                      <returnType>
+                        <BOOL />
+                      </returnType>
+                    </interface>
+                    <addData />
+                  </Method>
+                </Methods>
+                <addData />
+              </Interface>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+              <Interface name="I_ReportSink" ObjectId="67133bc1-a5d8-4609-b029-8a7ff8f2da9e">
+                <Methods>
+                  <Method name="PublishReport" ObjectId="55d1aa6b-e70a-4be3-92b9-73b19edd90ba">
+                    <interface>
+                      <returnType>
+                        <BOOL />
+                      </returnType>
+                      <inputVars>
+                        <variable name="Report">
+                          <type>
+                            <derived name="JobReport" />
+                          </type>
+                        </variable>
+                      </inputVars>
+                    </interface>
+                    <addData />
+                  </Method>
+                </Methods>
+                <addData />
+              </Interface>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/interface" handleUnknown="implementation">
+              <Interface name="I_Device" ObjectId="3a0b964b-3f45-4f8d-a6f7-3a1765ec6cfd">
+                <Inheritance>
+                  <Extends>I_Actuator</Extends>
+                </Inheritance>
+                <addData />
+              </Interface>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="PLC_PRG" pouType="program">
+                <interface>
+                  <localVars>
+                    <variable name="_InitDone">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="_JobManager">
+                      <type>
+                        <derived name="FB_JobManager" />
+                      </type>
+                    </variable>
+                    <variable name="_UserInterface">
+                      <type>
+                        <derived name="FB_UserInterface" />
+                      </type>
+                    </variable>
+                    <variable name="_JobSelector">
+                      <type>
+                        <derived name="FB_JobSelector" />
+                      </type>
+                    </variable>
+                    <variable name="_Conveyor">
+                      <type>
+                        <derived name="FB_ConveyorElectrical" />
+                      </type>
+                    </variable>
+                    <variable name="_Cobot">
+                      <type>
+                        <derived name="FB_Cobot" />
+                      </type>
+                    </variable>
+                    <variable name="_zAxis">
+                      <type>
+                        <derived name="FB_zAxis" />
+                      </type>
+                    </variable>
+                    <variable name="_Spindle">
+                      <type>
+                        <derived name="FB_Spindle" />
+                      </type>
+                    </variable>
+                    <variable name="_ReportJob">
+                      <type>
+                        <derived name="FB_ReportJob" />
+                      </type>
+                    </variable>
+                    <variable name="_LogSink">
+                      <type>
+                        <derived name="FB_LogSink" />
+                      </type>
+                    </variable>
+                  </localVars>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT _InitDone THEN
+	_InitDone := InitPous();
+END_IF
+
+
+_JobManager.RunJob();
+
+
+//I/O's connection: Machine -&gt; Material
+//For Conveyor:
+IO_Simulation.MoverEnable := _Conveyor.MoverEnable;
+IO_Simulation.MoverExecuteFor :=  _Conveyor.MoverExecuteFor;
+IO_Simulation.MoverExecuteBac :=  _Conveyor.MoverExecuteBac;
+// For Robot:
+IO_Cobot.Cmd_TargetPos01mm := INT_TO_WORD(_Cobot.MoverTarget);   // 0..5000: no sign issue
+IO_Cobot.Cmd_Start := _Cobot.MoverExecute;
+IO_Cobot.Cmd_Enable := _Cobot.MoverEnable;
+// For Z valve
+IO_Simulation.zValve := _zAxis.zValve;
+// For Spindle
+IO_Simulation.SpindleEnable := _Spindle.SpindleEnable;
+IO_Simulation.SpindleExecute := _Spindle.SpindleExecute;
+IO_Simulation.SpindleExecuteTime := _Spindle.SpindleExecuteTime;
+
+// Simulation
+PRG_PlantSim();
+
+//I/O's connection: Material -&gt; Machine
+//For Conveyor:
+_Conveyor.MoverActPos := IO_Simulation.MoverActPos;
+_Conveyor.MoverReady := IO_Simulation.MoverReady; 
+// For cobot:
+_Cobot.MoverPosEcho := WORD_TO_INT(IO_Cobot.Sts_TargetPosEcho01mm);
+_Cobot.MoverDone := IO_Cobot.Sts_Done;
+_Cobot.MoverHeartbeat := WORD_TO_INT(IO_Cobot.Sts_Heartbeat);
+// For Z valve
+_zAxis.ScrewEngaged := IO_Simulation.ScrewEngaged;
+_zAxis.ScrewReleased := IO_Simulation.ScrewReleased;
+_zAxis.zDown := IO_Simulation.zDown;
+// For Spindle
+_Spindle.SpindleReady := IO_Simulation.SpindleReady;
+_Spindle.SpindleDone := IO_Simulation.SpindleDone;
+
+
+
+</xhtml>
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="InitPous" ObjectId="68873a1c-9b07-4c5b-abbc-4ab445fc9305">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <localVars>
+                          <variable name="_Mover">
+                            <type>
+                              <derived name="I_Mover" />
+                            </type>
+                          </variable>
+                        </localVars>
+                        <addData>
+                          <data name="http://www.3s-software.com/plcopenxml/accessmodifiers" handleUnknown="implementation">
+                            <AccessModifiers Private="true" />
+                          </data>
+                        </addData>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">// Injection of dependencies
+IF Machine_Constants.USE_COBOT THEN
+	_Mover := _Cobot;
+ELSE
+	_Mover := _Conveyor;
+END_IF
+
+_ReportJob.AddSink(_LogSink);
+
+InitPous := _JobManager.Init(
+	UserInterface := _UserInterface,
+	JobSelector := _JobSelector,
+	Mover:= _Mover,
+	zAxis := _zAxis,
+	Spindle := _Spindle,
+	ReportJob := _ReportJob);</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>fca93f2e-06de-42f3-8528-1719cc99a366</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_FunctionBlock_Base" pouType="functionBlock">
+                <interface>
+                  <localVars>
+                    <variable name="_Error">
+                      <type>
+                        <derived name="ErrorCode" />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Implements>I_Resettable</Implements>
+                        <Implements>I_Diagnosable</Implements>
+                      </Inheritance>
+                    </data>
+                    <data name="http://www.3s-software.com/plcopenxml/accessmodifiers" handleUnknown="implementation">
+                      <AccessModifiers Abstract="true" />
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="852b4299-c9da-4fcd-938b-d1d5036f2055">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <addData>
+                          <data name="http://www.3s-software.com/plcopenxml/accessmodifiers" handleUnknown="implementation">
+                            <AccessModifiers Abstract="true" />
+                          </data>
+                          <data name="http://www.3s-software.com/plcopenxml/attributes" handleUnknown="implementation">
+                            <Attributes>
+                              <Attribute Name="abstract" Value="" />
+                            </Attributes>
+                          </data>
+                        </addData>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="RaiseError" ObjectId="08579cc0-bc3d-4829-a9a1-674e64300dc4">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="Error">
+                            <type>
+                              <derived name="ErrorCode" />
+                            </type>
+                          </variable>
+                        </inputVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">RaiseError := FALSE;
+
+IF _Error = ErrorCode.NoError THEN
+	_Error := Error;
+	Trace(CmpLog.LogClass.LOG_ERROR, ErrorCodeToString(Error));
+	RaiseError := TRUE;
+END_IF
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="GetError" ObjectId="0e76d0ed-0f92-493f-bad0-d3ff893862a1">
+                      <interface>
+                        <returnType>
+                          <derived name="ErrorCode" />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">GetError := _Error;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="ClearError" ObjectId="5ec9f487-c2fa-4569-9f34-4ac1fa3c04f6">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_Error := ErrorCode.NoError;
+ClearError := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="HasError" ObjectId="ee897d5b-b836-47b8-96e9-74e3a1369bdb">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">HasError := (_Error &lt;&gt; ErrorCode.NoError);</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>148afabd-380a-438f-87ea-5bf7be8d1247</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_JobManager" pouType="functionBlock">
+                <interface>
+                  <localVars>
+                    <variable name="_InitDone">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="_state">
+                      <type>
+                        <derived name="JobState" />
+                      </type>
+                    </variable>
+                    <variable name="_ActiveError">
+                      <type>
+                        <derived name="ErrorCode" />
+                      </type>
+                    </variable>
+                    <variable name="_Stop">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="_Reseters">
+                      <type>
+                        <array>
+                          <dimension lower="1" upper="6" />
+                          <baseType>
+                            <derived name="I_Resettable" />
+                          </baseType>
+                        </array>
+                      </type>
+                    </variable>
+                    <variable name="_Diagnosable">
+                      <type>
+                        <array>
+                          <dimension lower="1" upper="6" />
+                          <baseType>
+                            <derived name="I_Diagnosable" />
+                          </baseType>
+                        </array>
+                      </type>
+                    </variable>
+                    <variable name="_i">
+                      <type>
+                        <DINT />
+                      </type>
+                    </variable>
+                    <variable name="_UserInterface">
+                      <type>
+                        <derived name="REFERENCE TO FB_UserInterface" />
+                      </type>
+                    </variable>
+                    <variable name="_JobSelector">
+                      <type>
+                        <derived name="REFERENCE TO FB_JobSelector" />
+                      </type>
+                    </variable>
+                    <variable name="_Mover">
+                      <type>
+                        <derived name="I_Mover" />
+                      </type>
+                    </variable>
+                    <variable name="_zAxis">
+                      <type>
+                        <derived name="REFERENCE TO FB_zAxis" />
+                      </type>
+                    </variable>
+                    <variable name="_Spindle">
+                      <type>
+                        <derived name="REFERENCE TO FB_Spindle" />
+                      </type>
+                    </variable>
+                    <variable name="_ReportJob">
+                      <type>
+                        <derived name="REFERENCE TO FB_ReportJob" />
+                      </type>
+                    </variable>
+                    <variable name="_SpindleOk">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="_MoverOk">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="63fe4d37-25c8-40dc-ad10-2ef6453ad5f8">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+Reset := TRUE;
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Init" ObjectId="d7ca0b86-6794-4a47-9803-daffb35999bd">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="UserInterface">
+                            <type>
+                              <derived name="REFERENCE TO FB_UserInterface" />
+                            </type>
+                          </variable>
+                          <variable name="JobSelector">
+                            <type>
+                              <derived name="REFERENCE TO FB_JobSelector" />
+                            </type>
+                          </variable>
+                          <variable name="Mover">
+                            <type>
+                              <derived name="I_Mover" />
+                            </type>
+                          </variable>
+                          <variable name="zAxis">
+                            <type>
+                              <derived name="REFERENCE TO FB_zAxis" />
+                            </type>
+                          </variable>
+                          <variable name="Spindle">
+                            <type>
+                              <derived name="REFERENCE TO FB_Spindle" />
+                            </type>
+                          </variable>
+                          <variable name="ReportJob">
+                            <type>
+                              <derived name="REFERENCE TO FB_ReportJob" />
+                            </type>
+                          </variable>
+                        </inputVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_UserInterface REF= UserInterface;
+_JobSelector REF= JobSelector;
+_Mover := Mover;
+_zAxis REF= zAxis;
+_Spindle REF= Spindle;
+_ReportJob REF= ReportJob;
+
+// Reseters
+_Reseters[1] := _UserInterface;
+_Reseters[2] := _JobSelector;
+_Reseters[3] := _Mover;
+_Reseters[4] := _zAxis;
+_Reseters[5] := _Spindle;
+_Reseters[6] := _ReportJob;
+
+// Diagnosable
+_Diagnosable[1] := _UserInterface;
+_Diagnosable[2] := _JobSelector;
+_Diagnosable[3] := _Mover;
+_Diagnosable[4] := _zAxis;
+_Diagnosable[5] := _Spindle;
+_Diagnosable[6] := _ReportJob;
+
+_InitDone := TRUE;
+Init := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="DisableAll" ObjectId="997eb126-0ce4-4a1b-a3dd-74157243ac39">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_SpindleOk := _Spindle.Disable();
+_MoverOk   := _Mover.Disable();
+DisableAll := _SpindleOk AND _MoverOk;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="EnableAll" ObjectId="63ad21e2-1101-42cb-8c92-a31884fa40d5">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_SpindleOk := _Spindle.Enable();
+_MoverOk   := _Mover.Enable();
+EnableAll  := _SpindleOk AND _MoverOk;
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="ResetAll" ObjectId="04266275-37f7-4b00-8a3d-02d5507b2310">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ResetAll := TRUE;
+
+FOR _i := 1 TO UPPER_BOUND(_Reseters, 1) DO
+    IF NOT _Reseters[_i].Reset() THEN
+        ResetAll := FALSE;
+    END_IF
+END_FOR</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="CheckErrors" ObjectId="9355f896-5f5c-4300-8cea-015bd956ba3d">
+                      <interface>
+                        <returnType>
+                          <derived name="ErrorCode" />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">CheckErrors := ErrorCode.NoError;
+
+FOR _i := 1 TO UPPER_BOUND(_Diagnosable, 1) DO
+    IF _Diagnosable[_i].GetError() &lt;&gt; ErrorCode.NoError
+       AND CheckErrors = ErrorCode.NoError THEN
+        CheckErrors := _Diagnosable[_i].GetError();
+    END_IF
+END_FOR</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="RunJob" ObjectId="51e60925-b383-4e15-b1de-e6afd67af44b">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">IF NOT _InitDone THEN
+	RETURN;
+END_IF
+
+_ActiveError := CheckErrors();
+_Stop := _UserInterface.IsStopRequired();
+		  
+IF _ActiveError &lt;&gt; ErrorCode.NoError AND _state &lt;&gt; JobState.Reset THEN
+    _state := JobState.Error;
+END_IF
+
+IF _state &lt;&gt; JobState.Reset AND _state &lt;&gt; JobState.Error THEN
+    EnableAll();
+ELSE
+    DisableAll();
+END_IF
+
+CASE _state OF
+	JobState.Reset :
+		IF ResetAll() THEN
+			_state := JobState.Idle;
+		END_IF
+	JobState.Idle:
+		IF _Stop THEN
+			_state := JobState.Reset;
+		ELSIF _zAxis.Retract() THEN
+        	IF _UserInterface.IsStartRequired() THEN
+            _ReportJob.Reset();
+			_ReportJob.JobStart();
+            _state := JobState.ReadingTargetPosition;
+        	END_IF
+    	END_IF
+	JobState.ReadingTargetPosition :
+		IF _JobSelector.ReturnScrew() THEN
+			_state:= JobState.MovingToTargetPosition;
+		ELSE
+			_state := JobState.MovingToBase;
+		END_IF
+	JobState.MovingToTargetPosition :
+		IF _Mover.MoveToPosition(_JobSelector.CurrentScrew.PositionMm) THEN
+			_state:= JobState.MovingZaxisToTool;
+		END_IF
+	JobState.MovingZaxisToTool :
+		    CASE _zAxis.Engage() OF
+        		ActionResult.Done:
+            		_state := JobState.ProcessingTool;
+				ActionResult.Failed:
+            		_ReportJob.FailScrew(_JobSelector.CurrentScrew);
+					_state := JobState.MovingZaxisToBase;
+    		END_CASE
+	JobState.ProcessingTool :
+		IF _Spindle.ProcessTool(_JobSelector.CurrentScrew.AngleDeg) THEN		
+			_ReportJob.SuccessScrew(_JobSelector.CurrentScrew);
+			_state:= JobState.MovingZaxisToBase;
+		END_IF
+	JobState.MovingZaxisToBase :
+		IF _zAxis.Retract() THEN
+			_state:= JobState.ReadingTargetPosition;
+		END_IF
+	JobState.MovingToBase :
+		IF _Mover.MoveToPosition(0)  THEN
+			_state := JobState.Idle;
+			_ReportJob.JobEnd();
+		END_IF
+	JobState.Error :
+		IF _Stop THEN
+			_state := JobState.Reset;
+		END_IF
+END_CASE
+
+// Stop during a job = abort: publish the partial report, then reset every component.
+// The next Start begins a fresh job from the first screw.
+IF _Stop
+   AND _state &lt;&gt; JobState.Idle
+   AND _state &lt;&gt; JobState.Reset
+   AND _state &lt;&gt; JobState.Error THEN
+	_ReportJob.JobAborted();
+	_state := JobState.Reset;
+END_IF
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>ab6b24a1-115c-4903-a6b4-976c8399b636</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_UserInterface" pouType="functionBlock">
+                <interface>
+                  <inputVars>
+                    <variable name="StartRequest">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="StopRequest">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </inputVars>
+                  <localVars>
+                    <variable name="_Start_Trig">
+                      <type>
+                        <derived name="R_TRIG" />
+                      </type>
+                    </variable>
+                    <variable name="_Stop_Trig">
+                      <type>
+                        <derived name="R_TRIG" />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="bd270192-195e-45f4-bb54-9e746884302a">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+Reset := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="IsStartRequired" ObjectId="ba4c53d1-5b15-4800-a2f7-3e665d95b5fb">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_Start_Trig(CLK := StartRequest);
+IsStartRequired := _Start_Trig.Q;
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="IsStopRequired" ObjectId="1d552d34-3b24-4dfe-bc58-315491414854">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_Stop_Trig(CLK := StopRequest);
+IsStopRequired := _Stop_Trig.Q;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>4604bc88-3068-485d-a32d-07ee0f934538</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_JobSelector" pouType="functionBlock">
+                <interface>
+                  <inputVars>
+                    <variable name="ArrScrews">
+                      <type>
+                        <derived name="ScrewList" />
+                      </type>
+                      <initialValue>
+                        <arrayValue>
+                          <value>
+                            <structValue>
+                              <value member="PositionMm">
+                                <simpleValue value="100.0" />
+                              </value>
+                              <value member="AngleDeg">
+                                <simpleValue value="90" />
+                              </value>
+                            </structValue>
+                          </value>
+                          <value>
+                            <structValue>
+                              <value member="PositionMm">
+                                <simpleValue value="130.0" />
+                              </value>
+                              <value member="AngleDeg">
+                                <simpleValue value="600" />
+                              </value>
+                            </structValue>
+                          </value>
+                          <value>
+                            <structValue>
+                              <value member="PositionMm">
+                                <simpleValue value="185.0" />
+                              </value>
+                              <value member="AngleDeg">
+                                <simpleValue value="-180" />
+                              </value>
+                            </structValue>
+                          </value>
+                          <value>
+                            <structValue>
+                              <value member="PositionMm">
+                                <simpleValue value="27.0" />
+                              </value>
+                              <value member="AngleDeg">
+                                <simpleValue value="360" />
+                              </value>
+                            </structValue>
+                          </value>
+                          <value>
+                            <structValue>
+                              <value member="PositionMm">
+                                <simpleValue value="300.0" />
+                              </value>
+                              <value member="AngleDeg">
+                                <simpleValue value="720" />
+                              </value>
+                            </structValue>
+                          </value>
+                        </arrayValue>
+                      </initialValue>
+                    </variable>
+                  </inputVars>
+                  <outputVars>
+                    <variable name="CurrentScrew">
+                      <type>
+                        <derived name="Screw" />
+                      </type>
+                    </variable>
+                    <variable name="Job_Done">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </outputVars>
+                  <localVars>
+                    <variable name="_TableIndex">
+                      <type>
+                        <INT />
+                      </type>
+                      <initialValue>
+                        <simpleValue value="0" />
+                      </initialValue>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="cbd08f19-6982-4ef4-bd1a-0a35c7e8ba88">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+_TableIndex := 0;
+Job_Done := FALSE;
+
+Reset := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="ReturnScrew" ObjectId="ff93f8f8-acec-49fd-87a4-70498c3d70aa">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ReturnScrew := FALSE;
+
+
+IF SelectNextScrew() THEN
+	CurrentScrew := ArrScrews[_TableIndex];
+	ReturnScrew := TRUE;
+ELSE
+	CurrentScrew.PositionMm := 0.0;
+	CurrentScrew.AngleDeg := 0;
+END_IF
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="SelectNextScrew" ObjectId="c7da85f4-ea83-437d-8cba-00e7c245e299">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">// Method responsible for incrementing _TableIndex
+SelectNextScrew := FALSE;
+Job_Done := FALSE;
+IF _TableIndex &lt; UPPER_BOUND(ArrScrews, 1) THEN
+	_TableIndex := _TableIndex + 1;
+	SelectNextScrew := TRUE;
+ELSE
+	_TableIndex := 0;
+	Job_Done := TRUE;
+END_IF</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>9c1e931b-5792-473d-be29-2f0583139f7b</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_ConveyorElectrical" pouType="functionBlock">
+                <interface>
+                  <inputVars>
+                    <variable name="MoverActPos">
+                      <type>
+                        <REAL />
+                      </type>
+                    </variable>
+                    <variable name="MoverReady">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </inputVars>
+                  <outputVars>
+                    <variable name="MoverEnable">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="MoverExecuteFor">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="MoverExecuteBac">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </outputVars>
+                  <localVars>
+                    <variable name="_MoverTarget">
+                      <type>
+                        <REAL />
+                      </type>
+                    </variable>
+                    <variable name="_TimerEnablement">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_TimerMoveLinear">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                        <Implements>I_Mover</Implements>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="3ba490a2-70e8-46e6-b5d0-9d6e797cc8d7">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+Disable();
+MoverExecuteFor := FALSE;
+MoverExecuteBac := FALSE;
+_MoverTarget :=  0.0;
+_TimerEnablement(IN := FALSE, PT := T#1S);
+_TimerMoveLinear(IN := FALSE, PT := T#100S);
+Reset := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="MoveToPosition" ObjectId="a89604ee-9883-4fb5-b54e-1a21f20b7860">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="Position">
+                            <type>
+                              <REAL />
+                            </type>
+                          </variable>
+                        </inputVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">MoveToPosition := FALSE;
+
+_MoverTarget := Position;
+
+
+IF _TimerMoveLinear.Q THEN
+	RaiseError(ErrorCode.TargetNotReached);
+ELSIF _MoverTarget - MoverActPos &gt;= 1 THEN
+	MoverExecuteFor := TRUE;
+ELSIF _MoverTarget - MoverActPos &lt;= -1 THEN
+	MoverExecuteBac := TRUE;
+ELSE
+	MoveToPosition := TRUE;
+	MoverExecuteFor := FALSE;
+	MoverExecuteBac := FALSE;
+END_IF
+
+_TimerMoveLinear(IN := (MoverExecuteFor OR MoverExecuteBac), PT := T#100S);
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Enable" ObjectId="15e55061-f326-4ad7-8d02-fee028162f61">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">Enable := FALSE;
+
+MoverEnable := TRUE;
+_TimerEnablement(IN := MoverEnable AND NOT MoverReady, PT := T#1S);
+
+IF MoverReady THEN
+	Enable := TRUE;
+ELSIF _TimerEnablement.Q THEN
+	RaiseError(ErrorCode.EnablementError);
+END_IF
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Disable" ObjectId="65956a08-0bd7-4c9a-9e33-68ac0a2c3371">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">MoverEnable := FALSE;
+Disable := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>aed87809-29af-4be9-9e79-86ce516b4e99</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_zAxis" pouType="functionBlock">
+                <interface>
+                  <inputVars>
+                    <variable name="zDown">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="ScrewEngaged">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="ScrewReleased">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </inputVars>
+                  <outputVars>
+                    <variable name="zValve">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </outputVars>
+                  <localVars>
+                    <variable name="_timerUp">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_timerDown">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="c262b068-96bc-4f94-abea-71b7e33c652e">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+
+zValve := FALSE;
+
+IF zDown THEN
+	Reset := TRUE;
+END_IF
+
+_timerUp(IN := FALSE, PT := T#5S);
+_timerDown(IN := FALSE, PT := T#5S);</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Engage" ObjectId="e1cbb33f-14a2-452a-b4e8-164ef14f6c67">
+                      <interface>
+                        <returnType>
+                          <derived name="ActionResult" />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">Engage := ActionResult.Busy;
+zValve := TRUE;
+
+_timerUp(IN := zValve AND NOT ScrewEngaged, PT := T#5S);
+_timerDown(IN := FALSE, PT := T#5S);
+
+IF ScrewEngaged THEN
+	Engage := ActionResult.Done;
+ELSIF _timerUp.Q THEN
+	Engage := ActionResult.Failed;
+END_IF
+
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Retract" ObjectId="d6366a9e-920a-4079-be94-fdcc4264ad2d">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">Retract := FALSE;
+zValve := FALSE;
+
+_timerDown(IN := NOT zValve AND NOT (zDown AND ScrewReleased), PT := T#5S);
+_timerUp(IN := FALSE, PT := T#5S);
+
+IF zDown AND ScrewReleased THEN
+    Retract := TRUE;
+ELSIF _timerDown.Q THEN
+	RaiseError(ErrorCode.ScrewNotReleased);
+END_IF
+
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>6d9119b4-2fd2-4377-aeac-b8563c4156c4</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_Spindle" pouType="functionBlock">
+                <interface>
+                  <inputVars>
+                    <variable name="SpeedDegPerSec">
+                      <type>
+                        <DINT />
+                      </type>
+                      <initialValue>
+                        <simpleValue value="Machine_Constants.TOOL_SPEED" />
+                      </initialValue>
+                    </variable>
+                    <variable name="SpindleReady">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="SpindleDone">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </inputVars>
+                  <outputVars>
+                    <variable name="SpindleEnable">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="SpindleExecute">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="SpindleExecuteTime">
+                      <type>
+                        <TIME />
+                      </type>
+                    </variable>
+                  </outputVars>
+                  <localVars>
+                    <variable name="_AngleTarget">
+                      <type>
+                        <DINT />
+                      </type>
+                    </variable>
+                    <variable name="_Started">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="_TimerEnablement">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_TimerProcessTool">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                        <Implements>I_Actuator</Implements>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="9db809f6-8883-4137-be28-d8f099a2cd88">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+Disable();
+SpindleEnable := FALSE;
+SpindleExecute := FALSE;
+SpindleExecuteTime := T#0S;
+_AngleTarget := 0;
+_Started := FALSE;
+_TimerEnablement(IN := FALSE, PT := T#1S);
+_TimerProcessTool(IN := FALSE, PT := T#20S);
+Reset := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="ProcessTool" ObjectId="09ca33af-99da-4206-87d5-f45b2177e0f6">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="Angle">
+                            <type>
+                              <DINT />
+                            </type>
+                          </variable>
+                        </inputVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ProcessTool := FALSE;
+_TimerProcessTool(IN := SpindleExecute AND NOT SpindleDone, PT := T#20S);
+_AngleTarget := ABS(Angle); 
+
+IF NOT _Started AND SpindleEnable THEN
+	SpindleExecuteTime := DINT_TO_TIME(_AngleTarget*1000/SpeedDegPerSec);
+	SpindleExecute := TRUE;
+	_Started := TRUE;
+ELSIF SpindleDone THEN
+	SpindleExecute := FALSE;
+	_Started := FALSE;
+	ProcessTool := TRUE;
+ELSIF _TimerProcessTool.Q THEN
+	RaiseError(ErrorCode.SpindleError);
+END_IF
+
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Enable" ObjectId="07fe7c73-f094-4167-89e6-1ec7aa338a18">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">Enable := FALSE;
+
+SpindleEnable := TRUE;
+_TimerEnablement(IN := SpindleEnable AND NOT SpindleReady, PT := T#1S);
+
+IF SpindleReady THEN
+	Enable := TRUE;
+ELSIF _TimerEnablement.Q THEN
+	RaiseError(ErrorCode.EnablementError);
+END_IF</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Disable" ObjectId="80efe083-945d-4a9e-ab8b-57078f56156d">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">SpindleEnable := FALSE;
+Disable := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>651ae768-fee6-4563-8b27-eaf8b9d2f730</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="PRG_PlantSim" pouType="program">
+                <interface>
+                  <localVars>
+                    <variable name="_Increment">
+                      <type>
+                        <REAL />
+                      </type>
+                      <initialValue>
+                        <simpleValue value="1" />
+                      </initialValue>
+                    </variable>
+                    <variable name="_ZAxisMovingTimeUp">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_ZAxisMovingTimeDown">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_SpindleMovingTime">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                  </localVars>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml">// Conveyor
+IO_Simulation.MoverReady := IO_Simulation.MoverEnable
+                                   AND NOT IO_Simulation.SimFail_MoverReady;
+IF IO_Simulation.MoverExecuteFor AND IO_Simulation.MoverEnable
+   AND NOT IO_Simulation.SimFail_MoverBlocked THEN
+    IO_Simulation.MoverActPos := IO_Simulation.MoverActPos + _Increment;
+ELSIF IO_Simulation.MoverExecuteBac AND IO_Simulation.MoverEnable
+   AND NOT IO_Simulation.SimFail_MoverBlocked THEN
+    IO_Simulation.MoverActPos := IO_Simulation.MoverActPos - _Increment;
+END_IF
+
+// Z Axis
+_ZAxisMovingTimeUp(IN := IO_Simulation.zValve, PT := T#1S);
+IO_Simulation.ScrewEngaged := _ZAxisMovingTimeUp.Q
+                                     AND NOT IO_Simulation.SimFail_ScrewEngaged;
+_ZAxisMovingTimeDown(IN := NOT IO_Simulation.zValve, PT := T#1S);
+IO_Simulation.ScrewReleased := _ZAxisMovingTimeDown.Q
+                                      AND NOT IO_Simulation.SimFail_ScrewReleased;
+// zDown is not filtered: the cylinder physically retracts even if the bit stays engaged
+IO_Simulation.zDown := _ZAxisMovingTimeDown.Q;
+
+// Spindle
+IO_Simulation.SpindleReady := IO_Simulation.SpindleEnable;
+_SpindleMovingTime(IN := IO_Simulation.SpindleExecute
+                         AND IO_Simulation.SpindleEnable,
+                   PT := IO_Simulation.SpindleExecuteTime);
+IO_Simulation.SpindleDone := _SpindleMovingTime.Q
+                                    AND NOT IO_Simulation.SimFail_SpindleDone;</xhtml>
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>392460d5-d7dc-4594-a367-43e28566d65c</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_ReportJob" pouType="functionBlock">
+                <interface>
+                  <localVars>
+                    <variable name="_NbSuccess">
+                      <type>
+                        <INT />
+                      </type>
+                      <initialValue>
+                        <simpleValue value="0" />
+                      </initialValue>
+                    </variable>
+                    <variable name="_NbFail">
+                      <type>
+                        <INT />
+                      </type>
+                      <initialValue>
+                        <simpleValue value="0" />
+                      </initialValue>
+                    </variable>
+                    <variable name="_FailedScrews">
+                      <type>
+                        <derived name="ScrewList" />
+                      </type>
+                    </variable>
+                    <variable name="_SuccessfulScrews">
+                      <type>
+                        <derived name="ScrewList" />
+                      </type>
+                    </variable>
+                    <variable name="_JobDone">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="_JobId">
+                      <type>
+                        <UDINT />
+                      </type>
+                    </variable>
+                    <variable name="_StartedAt">
+                      <type>
+                        <DT />
+                      </type>
+                    </variable>
+                    <variable name="_FinishedAt">
+                      <type>
+                        <DT />
+                      </type>
+                    </variable>
+                    <variable name="_Sinks">
+                      <type>
+                        <array>
+                          <dimension lower="1" upper="3" />
+                          <baseType>
+                            <derived name="I_ReportSink" />
+                          </baseType>
+                        </array>
+                      </type>
+                    </variable>
+                    <variable name="_EmptyScrewList">
+                      <type>
+                        <derived name="ScrewList" />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="569f013c-b790-41f6-b044-cb890783effc">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+_NbSuccess := 0;
+_NbFail := 0;
+_JobDone := FALSE;
+
+_FailedScrews     := _EmptyScrewList;
+_SuccessfulScrews := _EmptyScrewList;
+
+Reset := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="JobEnd" ObjectId="284905ec-208e-4294-bd67-87021c2d24c4">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_FinishedAt := Now();
+
+Trace(CmpLog.LogClass.LOG_INFO, 'Job Done');
+
+JobEnd := SendReportToSinks(Completed := TRUE);</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="SuccessScrew" ObjectId="e58ee6ee-2499-41dd-97a4-75431f8f86c1">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="SuccessfulScrew">
+                            <type>
+                              <derived name="Screw" />
+                            </type>
+                          </variable>
+                        </inputVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">SuccessScrew := FALSE;
+
+IF _NbSuccess &lt; UPPER_BOUND(_SuccessfulScrews, 1) THEN
+	_NbSuccess := _NbSuccess + 1;
+	_SuccessfulScrews[_NbSuccess] := SuccessfulScrew;
+	SuccessScrew := TRUE;
+END_IF
+
+Trace(CmpLog.LogClass.LOG_INFO,
+        CONCAT('Screw successfully processed at position ', REAL_TO_STRING(SuccessfulScrew.PositionMm)));</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="FailScrew" ObjectId="96cc8508-73e4-4d70-879e-320b6c3a8669">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="FailedScrew">
+                            <type>
+                              <derived name="Screw" />
+                            </type>
+                          </variable>
+                        </inputVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">FailScrew := FALSE;
+
+IF _NbFail &lt; UPPER_BOUND(_FailedScrews, 1) THEN
+	_NbFail := _NbFail + 1;
+	_FailedScrews[_NbFail] := FailedScrew;
+	FailScrew := TRUE;
+END_IF
+
+Trace(CmpLog.LogClass.LOG_WARNING,
+        CONCAT('Screw missed at position ', REAL_TO_STRING(FailedScrew.PositionMm)));</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="JobStart" ObjectId="15a1d42a-11c8-4ee8-b02d-78264e3b9715">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_JobId      := _JobId + 1;
+_StartedAt  := Now();
+_FinishedAt := DT#1970-01-01-00:00:00;
+
+Trace(CmpLog.LogClass.LOG_INFO, 'Job Started');
+
+JobStart := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="JobAborted" ObjectId="22be6d26-dccf-400d-92dd-f94d055726f2">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_FinishedAt := Now();
+
+Trace(CmpLog.LogClass.LOG_WARNING, 'Job Aborted');
+
+JobAborted := SendReportToSinks(Completed := FALSE);</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="AddSink" ObjectId="a8ccc1b4-e674-4343-b493-c5b0ff3b6a05">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="Sink">
+                            <type>
+                              <derived name="I_ReportSink" />
+                            </type>
+                          </variable>
+                        </inputVars>
+                        <localVars>
+                          <variable name="_i">
+                            <type>
+                              <DINT />
+                            </type>
+                          </variable>
+                        </localVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">AddSink := FALSE;
+
+FOR _i := 1 TO UPPER_BOUND(_Sinks, 1) DO
+	IF _Sinks[_i] = 0 THEN
+		_Sinks[_i] := Sink;
+		AddSink := TRUE;
+		RETURN;
+	END_IF
+END_FOR</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="SendReportToSinks" ObjectId="79033d9a-9aeb-432e-adf3-74ea5e73fab6">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="Completed">
+                            <type>
+                              <BOOL />
+                            </type>
+                            <documentation>
+                              <xhtml xmlns="http://www.w3.org/1999/xhtml"> TRUE = job finished normally, FALSE = aborted by operator</xhtml>
+                            </documentation>
+                          </variable>
+                        </inputVars>
+                        <localVars>
+                          <variable name="_report">
+                            <type>
+                              <derived name="JobReport" />
+                            </type>
+                          </variable>
+                          <variable name="_i">
+                            <type>
+                              <DINT />
+                            </type>
+                          </variable>
+                        </localVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_report.JobId        := _JobId;
+_report.StartedAt    := _StartedAt;
+_report.FinishedAt   := _FinishedAt;
+_report.ScrewsOk     := _NbSuccess;
+_report.ScrewsFailed := _NbFail;
+_report.FailedScrews := _FailedScrews;
+_report.Completed := Completed;
+
+SendReportToSinks := TRUE;
+
+FOR _i := 1 TO UPPER_BOUND(_Sinks, 1) DO
+	IF _Sinks[_i] &lt;&gt; 0 THEN
+		IF NOT _Sinks[_i].PublishReport(_report) THEN
+			SendReportToSinks := FALSE;
+		END_IF
+	END_IF
+END_FOR</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Now" ObjectId="70cdd813-2e08-4220-8294-84bba62a8fa7">
+                      <interface>
+                        <returnType>
+                          <DT />
+                        </returnType>
+                        <localVars>
+                          <variable name="_sec">
+                            <type>
+                              <UDINT />
+                            </type>
+                          </variable>
+                          <variable name="_res">
+                            <type>
+                              <derived name="RTS_IEC_RESULT" />
+                            </type>
+                          </variable>
+                        </localVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_sec := SysTimeRtcGet(_res);
+
+IF _res = Errors.ERR_OK THEN
+	Now := UDINT_TO_DT(_sec);
+ELSE
+	Now := DT#1970-01-01-00:00:00;
+	RaiseError(ErrorCode.RtcNotAvailable);
+END_IF</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>76bea8b0-b98f-473e-a6f2-8c6a1fb10753</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="ErrorCodeToString" pouType="function">
+                <interface>
+                  <returnType>
+                    <string />
+                  </returnType>
+                  <inputVars>
+                    <variable name="Code">
+                      <type>
+                        <derived name="ErrorCode" />
+                      </type>
+                    </variable>
+                  </inputVars>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml">CASE Code OF
+	ErrorCode.NoError :
+		ErrorCodeToString := 'No Error';
+	ErrorCode.EnablementError:
+		ErrorCodeToString := 'Enablement Error';
+	ErrorCode.ScrewNotReleased:
+		ErrorCodeToString := 'Screw Not Released';
+	ErrorCode.TargetNotReached:
+		ErrorCodeToString := 'Target Not Reached';
+	ErrorCode.SpindleError:
+		ErrorCodeToString := 'Spindle Error';
+	ErrorCode.CobotNotConnected:
+		ErrorCodeToString := 'Cobot Not Connected';
+	ErrorCode.CobotMovementNotReached:
+		ErrorCodeToString := 'Cobot Movement Not Reached';
+	ErrorCode.RtcNotAvailable:
+		ErrorCodeToString := 'Rtc Not Available';
+ELSE
+		ErrorCodeToString := 'Unknown Error';	
+END_CASE</xhtml>
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>2f7b0045-0ce3-4af1-bbd8-da0bb8772a8a</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_Cobot" pouType="functionBlock">
+                <interface>
+                  <inputVars>
+                    <variable name="MoverPosEcho">
+                      <type>
+                        <INT />
+                      </type>
+                      <documentation>
+                        <xhtml xmlns="http://www.w3.org/1999/xhtml"> Echo to ensure synchronisation with MoverTarget</xhtml>
+                      </documentation>
+                    </variable>
+                    <variable name="MoverDone">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="MoverHeartbeat">
+                      <type>
+                        <INT />
+                      </type>
+                      <documentation>
+                        <xhtml xmlns="http://www.w3.org/1999/xhtml"> Watchdog counter to make sure Cobot connection is not lost</xhtml>
+                      </documentation>
+                    </variable>
+                  </inputVars>
+                  <outputVars>
+                    <variable name="MoverEnable">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="MoverTarget">
+                      <type>
+                        <INT />
+                      </type>
+                    </variable>
+                    <variable name="MoverExecute">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </outputVars>
+                  <localVars>
+                    <variable name="_state">
+                      <type>
+                        <derived name="MoverState" />
+                      </type>
+                      <initialValue>
+                        <simpleValue value="MoverState.Idle" />
+                      </initialValue>
+                    </variable>
+                    <variable name="_TimerEcho">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_TimerMove">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_TimerEnablement">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_LastHeartbeat">
+                      <type>
+                        <INT />
+                      </type>
+                    </variable>
+                    <variable name="_HbTimer">
+                      <type>
+                        <derived name="TON" />
+                      </type>
+                    </variable>
+                    <variable name="_Alive">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                    <variable name="_HbChanged">
+                      <type>
+                        <BOOL />
+                      </type>
+                    </variable>
+                  </localVars>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Extends>FB_FunctionBlock_Base</Extends>
+                        <Implements>I_Mover</Implements>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Reset" ObjectId="ebd30bfc-d34d-42d3-8a4b-744716105477">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">ClearError();
+Disable();
+MoverTarget :=  0;
+_state := MoverState.Idle;
+_TimerEnablement(IN := FALSE, PT := T#1S);
+_TimerEcho(IN := FALSE, PT := T#2S);
+_TimerMove(IN := FALSE, PT := T#30S);
+_HbTimer(IN := FALSE, PT := T#500MS);
+
+Reset := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="MoveToPosition" ObjectId="378573e2-b579-42c5-8b08-9bc278900838">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="Position">
+                            <type>
+                              <REAL />
+                            </type>
+                          </variable>
+                        </inputVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">MoveToPosition := FALSE;
+
+CASE _state OF
+
+	MoverState.Idle:
+		// Never start a cycle while the robot still asserts Done from a previous one
+		IF NOT MoverDone THEN
+			MoverTarget  := REAL_TO_INT(Position * 10.0);
+			MoverExecute := FALSE;
+			_state := MoverState.WaitingEcho;
+		END_IF
+
+	MoverState.WaitingEcho:
+		IF MoverPosEcho = MoverTarget THEN
+			MoverExecute := TRUE;
+			_state := MoverState.Moving;
+		ELSIF _TimerEcho.Q THEN
+			RaiseError(ErrorCode.CobotNotConnected);
+		END_IF
+
+	MoverState.Moving:
+		IF MoverDone THEN
+			MoverExecute := FALSE;
+			_state := MoverState.WaitingDoneReleased;
+		ELSIF _TimerMove.Q THEN
+			RaiseError(ErrorCode.CobotMovementNotReached);
+		END_IF
+
+	MoverState.WaitingDoneReleased:
+		IF NOT MoverDone THEN
+			MoveToPosition := TRUE;
+			_state := MoverState.Idle;
+		END_IF
+
+END_CASE
+
+_TimerEcho(IN := (_state = MoverState.WaitingEcho), PT := T#2S);
+_TimerMove(IN := (_state = MoverState.Moving), PT := T#30S);
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Enable" ObjectId="5ce8a02f-5599-4b4c-ae15-907232cf3c8b">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_HbChanged := (MoverHeartbeat &lt;&gt; _LastHeartbeat);
+_LastHeartbeat := MoverHeartbeat;
+_HbTimer(IN := NOT _HbChanged, PT := T#500MS);
+_Alive := NOT _HbTimer.Q;
+
+Enable := FALSE;
+MoverEnable := TRUE;
+
+_TimerEnablement(IN := NOT _Alive, PT := T#1S);
+
+IF _Alive THEN
+	Enable := TRUE;
+ELSIF _TimerEnablement.Q THEN
+	RaiseError(ErrorCode.CobotNotConnected);
+END_IF
+</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="Disable" ObjectId="fe2ad5e7-15e5-4e6d-be46-21aa4ca121bd">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">MoverEnable  := FALSE;
+MoverExecute := FALSE;
+Disable := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>b1067154-e2a8-4758-bbab-d29073d87995</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="FB_LogSink" pouType="functionBlock">
+                <interface>
+                  <addData>
+                    <data name="http://www.3s-software.com/plcopenxml/pouinheritance" handleUnknown="implementation">
+                      <Inheritance>
+                        <Implements>I_ReportSink</Implements>
+                      </Inheritance>
+                    </data>
+                  </addData>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml" />
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/method" handleUnknown="implementation">
+                    <Method name="PublishReport" ObjectId="2415bb07-8eda-40eb-9739-9949ed8e793e">
+                      <interface>
+                        <returnType>
+                          <BOOL />
+                        </returnType>
+                        <inputVars>
+                          <variable name="Report">
+                            <type>
+                              <derived name="JobReport" />
+                            </type>
+                          </variable>
+                        </inputVars>
+                        <localVars>
+                          <variable name="_msg">
+                            <type>
+                              <string length="255" />
+                            </type>
+                          </variable>
+                        </localVars>
+                      </interface>
+                      <body>
+                        <ST>
+                          <xhtml xmlns="http://www.w3.org/1999/xhtml">_msg := CONCAT('Job ', UDINT_TO_STRING(Report.JobId));
+_msg := CONCAT(_msg,   ' finished: ');
+_msg := CONCAT(_msg,   INT_TO_STRING(Report.ScrewsOk));
+_msg := CONCAT(_msg,   ' ok, ');
+_msg := CONCAT(_msg,   INT_TO_STRING(Report.ScrewsFailed));
+_msg := CONCAT(_msg,   ' failed');
+
+Trace(CmpLog.LogClass.LOG_INFO, _msg);
+
+PublishReport := TRUE;</xhtml>
+                        </ST>
+                      </body>
+                      <addData />
+                    </Method>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>590cfc8d-48b9-4767-8871-bb6878323fd1</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/pou" handleUnknown="implementation">
+              <pou name="Trace" pouType="function">
+                <interface>
+                  <returnType>
+                    <BOOL />
+                  </returnType>
+                  <inputVars>
+                    <variable name="Severity">
+                      <type>
+                        <UDINT />
+                      </type>
+                      <documentation>
+                        <xhtml xmlns="http://www.w3.org/1999/xhtml"> LogClass.LOG_INFO / LOG_WARNING / LOG_ERROR</xhtml>
+                      </documentation>
+                    </variable>
+                    <variable name="Msg">
+                      <type>
+                        <string length="255" />
+                      </type>
+                    </variable>
+                  </inputVars>
+                </interface>
+                <body>
+                  <ST>
+                    <xhtml xmlns="http://www.w3.org/1999/xhtml">LogAdd(
+	hLogger   := CmpLog.LogConstants.LOG_STD_LOGGER,
+	stCmpName := Machine_Constants.LOG_COMPONENT_NAME,
+	diClassID := UDINT_TO_DINT(Severity),
+	diErrorID := 0,
+	diInfoID  := 0,
+	stInfo    := Msg
+);
+
+Trace := TRUE;</xhtml>
+                  </ST>
+                </body>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>5f1b161d-19f6-4490-8bbf-59fe8ab8c336</ObjectId>
+                  </data>
+                </addData>
+              </pou>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/libraries" handleUnknown="implementation">
+              <Libraries>
+                <Library Name="#Standard" Namespace="Standard" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="false" LinkAllContent="false" DefaultResolution="Standard, * (System)" />
+                <Library Name="#BreakpointLogging" Namespace="BPLog" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="Breakpoint Logging Functions, * (3S - Smart Software Solutions GmbH)" />
+                <Library Name="#CmpLogAsync" Namespace="CmpLogAsync" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="false" LinkAllContent="false" DefaultResolution="CmpLogAsync, * (System)" />
+                <Library Name="#CmpLog" Namespace="CmpLog" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="false" LinkAllContent="false" DefaultResolution="CmpLog, * (System)" />
+                <Library Name="#IoStandard" Namespace="IoStandard" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="true" DefaultResolution="IoStandard, 3.5.17.0 (System)" />
+                <Library Name="#3SLicense" Namespace="_3S_LICENSE" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="3SLicense, 0.0.0.0 (CODESYS)" ResolverGuid="97c3b452-d9fa-4ac2-9d0c-3d420aa6d95b" />
+                <Library Name="#IoDrvEthernet" Namespace="IoDrvEthernet" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="IoDrvEthernet, 4.2.0.0 (3S - Smart Software Solutions GmbH)" />
+                <Library Name="#IoDrvModbusTCP" Namespace="IoDrvModbusTCP" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="IoDrvModbusTCP, 4.5.0.0 (CODESYS)" />
+                <Library Name="#CAA Device Diagnosis" Namespace="DED" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="CAA Device Diagnosis, 3.5.21.0 (CAA Technical Workgroup)" />
+                <Library Name="#SysTimeRtc" Namespace="SysTimeRtc" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="false" LinkAllContent="false" DefaultResolution="SysTimeRtc, * (System)" />
+                <Library Name="SysTypes Interfaces, * (System)" Namespace="SysTypes" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="false" LinkAllContent="false" />
+                <Library Name="CmpErrors2 Interfaces, * (System)" Namespace="CmpErrors" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="false" LinkAllContent="false" />
+                <Library Name="#System_VisuElems" Namespace="VisuElems" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElems, 4.9.1.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemMeter" Namespace="VisuElemMeter" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemMeter, 4.9.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemsSpecialControls" Namespace="VisuElemsSpecialControls" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemsSpecialControls, 4.7.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemsWinControls" Namespace="VisuElemsWinControls" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemsWinControls, 4.9.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemTextEditor" Namespace="VisuElemTextEditor" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemTextEditor, 4.8.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemTrace" Namespace="VisuElemTrace" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemTrace, 4.9.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuNativeControl" Namespace="VisuNativeControl" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuNativeControl, 4.9.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemsAlarm" Namespace="VisuElemsAlarm" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemsAlarm, 4.9.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemCamDisplayer" Namespace="VisuElemCamDisplayer" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemCamDisplayer, 4.7.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElem3DPath" Namespace="VisuElem3DPath" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElem3DPath, 4.7.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemsDateTime" Namespace="VisuElemsDateTime" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemsDateTime, 4.9.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuElemXYChart" Namespace="VisuElemXYChart" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuElemXYChart, 4.8.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <Library Name="#System_VisuInputs" Namespace="VisuInputs" HideWhenReferencedAsDependency="false" PublishSymbolsInContainer="false" SystemLibrary="true" LinkAllContent="false" DefaultResolution="VisuInputs, 4.7.0.0 (System)" ResolverGuid="2717eb6a-dd07-4c66-8d8d-cacebd7b18ae" />
+                <PlaceholderRedirections>
+                  <PlaceholderRedirection Placeholder="WagoVisuIconsMaterialDesign" Redirection="WagoVisuIconsMaterialDesign, 1.0.0.2 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoAppString" Redirection="WagoAppString, 1.6.3.4 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="Standard" Redirection="Standard, 3.5.18.0 (System)" />
+                  <PlaceholderRedirection Placeholder="WagoSysErrorBase" Redirection="WagoSysErrorBase, 1.6.2.6 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoTypesCommon" Redirection="WagoTypesCommon, 1.6.0.0 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoTypesErrorBase" Redirection="WagoTypesErrorBase, 1.6.2.1 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoSysUtils" Redirection="WagoSysUtils, 1.5.3.0 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoSysBehaviourModels" Redirection="WagoSysBehaviourModels, 1.6.3.1 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="VisuSymbols" Redirection="VisuSymbols, 4.5.0.0 (System)" />
+                  <PlaceholderRedirection Placeholder="WagoTypesCom" Redirection="WagoTypesCom, 1.6.2.3 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoVisuIcons" Redirection="WagoVisuIcons, 1.1.0.9 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoSysString" Redirection="WagoSysString, 1.6.1.1 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="WagoSysTypedefs_Pointer" Redirection="WagoSysTypedefs_Pointer, 1.0.2.0 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="StringUtils" Redirection="StringUtils, 3.5.20.0 (System)" />
+                  <PlaceholderRedirection Placeholder="WagoAppTime" Redirection="WagoAppTime, 1.7.3.5 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="Util" Redirection="Util, 3.5.21.0 (System)" />
+                  <PlaceholderRedirection Placeholder="WagoTypesProcessorLoad" Redirection="WagoTypesProcessorLoad, 1.0.1.1 (WAGO)" />
+                  <PlaceholderRedirection Placeholder="CmpLogAsync" Redirection="CmpLogAsync, 3.5.17.0 (System)" />
+                  <PlaceholderRedirection Placeholder="Standard64" Redirection="Standard64, 3.5.20.0 (System)" />
+                  <PlaceholderRedirection Placeholder="WagoVisuIcons_FR" Redirection="WagoVisuIcons_FR, 1.0.9.0 (WAGO_FR)" />
+                  <PlaceholderRedirection Placeholder="Collections" Redirection="Collections, 3.5.17.0 (System)" />
+                  <PlaceholderRedirection Placeholder="WagoSysPlainMem" Redirection="WagoSysPlainMem, 1.5.3.1 (WAGO)" />
+                </PlaceholderRedirections>
+                <addData>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>72187021-3f8d-45d5-bbc7-182ce8bb0209</ObjectId>
+                  </data>
+                </addData>
+              </Libraries>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/buildproperties" handleUnknown="implementation">
+              <BuildProperties>
+                <CompilerDefines>GENERATE_OVERLAY_VISU,VISU_USEPROPERTYINFO</CompilerDefines>
+              </BuildProperties>
+            </data>
+            <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+              <ObjectId>caa0251e-0c57-4cd7-96f2-c583ceadd520</ObjectId>
+            </data>
+          </addData>
+        </resource>
+        <addData>
+          <data name="Device" handleUnknown="discard">
+            <Device xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="">
+              <DeviceType>
+                <DeviceIdentification>
+                  <Type>4096</Type>
+                  <Id>0000 0004</Id>
+                  <Version>3.5.21.50</Version>
+                </DeviceIdentification>
+                <Connector moduleType="256" interface="Common.PCI" connectorId="0">
+                  <HostParameterSet />
+                </Connector>
+                <Connector moduleType="769" interface="SafetyInterface" connectorId="1">
+                  <HostParameterSet />
+                </Connector>
+                <DeviceParameterSet>
+                  <Parameter ParameterId="10001000" type="std:DWORD" IndexInDevDesc="0">
+                    <Attributes onlineaccess="read" />
+                    <Value name="_x0031_0001000" visiblename="Processor Load Lower Limit" onlineaccess="read">80</Value>
+                    <Name>Processor Load Lower Limit</Name>
+                  </Parameter>
+                  <Parameter ParameterId="10001001" type="std:DWORD" IndexInDevDesc="1">
+                    <Attributes onlineaccess="read" />
+                    <Value name="_x0031_0001001" visiblename="Processor Load Upper Limit" onlineaccess="read">90</Value>
+                    <Name>Processor Load Upper Limit</Name>
+                  </Parameter>
+                  <Parameter ParameterId="10001002" type="std:DWORD" IndexInDevDesc="2">
+                    <Attributes onlineaccess="read" />
+                    <Value name="_x0031_0001002" visiblename="Processor Load Processor Share" onlineaccess="read">90</Value>
+                    <Name>Processor Load Processor Share</Name>
+                  </Parameter>
+                  <Parameter ParameterId="10001010" type="std:bool" IndexInDevDesc="3">
+                    <Attributes onlineaccess="read" />
+                    <Value name="_x0031_0001010" visiblename="Processor Load Should Throw ProcessorLoadWatchdog_Exception" onlineaccess="read">FALSE</Value>
+                    <Name>Processor Load Should Throw ProcessorLoadWatchdog_Exception</Name>
+                  </Parameter>
+                </DeviceParameterSet>
+              </DeviceType>
+            </Device>
+          </data>
+          <data name="configurations" handleUnknown="discard">
+            <configurations>
+              <configuration name="Ethernet">
+                <addData>
+                  <data name="Device" handleUnknown="discard">
+                    <Device xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="">
+                      <DeviceType>
+                        <DeviceIdentification>
+                          <Type>110</Type>
+                          <Id>0000 0002</Id>
+                          <Version>4.2.0.0</Version>
+                        </DeviceIdentification>
+                        <Connector moduleType="110" role="child" interface="Common.PCI" connectorId="1">
+                          <HostParameterSet />
+                        </Connector>
+                        <Connector moduleType="111" interface="Common.Ethernet" connectorId="2" hostpath="1">
+                          <HostParameterSet>
+                            <ParameterSection>
+                              <Name>IP-Settings PLC 2</Name>
+                              <Description />
+                              <Parameter ParameterId="200" type="std:WSTRING" IndexInDevDesc="24">
+                                <Attributes />
+                                <Value name="_x0032_00" visiblename="NetworkInterfaceName" desc="Configured Name of Ethernet Interface (PLC 2).">""</Value>
+                                <Name>NetworkInterfaceName</Name>
+                                <Description>Configured Name of Ethernet Interface (PLC 2).</Description>
+                              </Parameter>
+                              <Parameter ParameterId="201" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="25">
+                                <Attributes />
+                                <Value name="_x0032_01" visiblename="IPAddress" desc="Configured IP Address of the Ethernet Interface (PLC 2).">[192, 168, 0, 2]</Value>
+                                <Name>IPAddress</Name>
+                                <Description>Configured IP Address of the Ethernet Interface (PLC 2).</Description>
+                              </Parameter>
+                              <Parameter ParameterId="202" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="26">
+                                <Attributes />
+                                <Value name="_x0032_02" visiblename="SubnetMask" desc="Configured Subnet Mask of the Ethernet Interface (PLC 2).">[255, 255, 255, 0]</Value>
+                                <Name>SubnetMask</Name>
+                                <Description>Configured Subnet Mask of the Ethernet Interface (PLC 2).</Description>
+                              </Parameter>
+                              <Parameter ParameterId="203" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="27">
+                                <Attributes />
+                                <Value name="_x0032_03" visiblename="GatewayAddress" desc="Configured Default Gateway of the Ethernet Interface (PLC 2).">[0, 0, 0, 0]</Value>
+                                <Name>GatewayAddress</Name>
+                                <Description>Configured Default Gateway of the Ethernet Interface (PLC 2).</Description>
+                              </Parameter>
+                            </ParameterSection>
+                            <Parameter ParameterId="0" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="0">
+                              <Attributes />
+                              <Value name="_x0030_" visiblename="IPAddress" desc="Configure IP Address of the Controller on the EtherNet bus (IP).">[192, 168, 0, 1]</Value>
+                              <Name>IPAddress</Name>
+                              <Description>Configure IP Address of the Controller on the EtherNet bus (IP).</Description>
+                            </Parameter>
+                            <Parameter ParameterId="1" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="1">
+                              <Attributes />
+                              <Value name="_x0031_" visiblename="SubnetMask" desc="Configure IP Address of the Controller on the EtherNet bus (Mask).">[255, 255, 255, 0]</Value>
+                              <Name>SubnetMask</Name>
+                              <Description>Configure IP Address of the Controller on the EtherNet bus (Mask).</Description>
+                            </Parameter>
+                            <Parameter ParameterId="2" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="2">
+                              <Attributes />
+                              <Value name="_x0032_" visiblename="GatewayAddress" desc="Configure IP Address of the Controller on the EtherNet bus (Gateway).">[0, 0, 0, 0]</Value>
+                              <Name>GatewayAddress</Name>
+                              <Description>Configure IP Address of the Controller on the EtherNet bus (Gateway).</Description>
+                            </Parameter>
+                            <Parameter ParameterId="3" type="localTypes:TransferRateType" IndexInDevDesc="3">
+                              <Attributes />
+                              <Value name="_x0033_" visiblename="TransferRate" desc="Configure Bus speed of the EtherNet.">0</Value>
+                              <Name>TransferRate</Name>
+                              <Description>Configure Bus speed of the EtherNet.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="4" type="localTypes:IPConfigModeType" IndexInDevDesc="4">
+                              <Attributes />
+                              <Value name="_x0034_" visiblename="IPConfigMode" desc="Configure the method this device uses for obtaining an IP address.">1</Value>
+                              <Name>IPConfigMode</Name>
+                              <Description>Configure the method this device uses for obtaining an IP address.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="5" type="std:STRING" IndexInDevDesc="5">
+                              <Attributes />
+                              <Value name="_x0035_" visiblename="DeviceName" desc="Configure the Network-/Device- Name, e.g. for DHCP addressing Use case.">'myDevice'</Value>
+                              <Name>DeviceName</Name>
+                              <Description>Configure the Network-/Device- Name, e.g. for DHCP addressing Use case.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="6" type="std:BOOL" IndexInDevDesc="6">
+                              <Attributes />
+                              <Value name="_x0036_" visiblename="WebServer" desc="Configure activation of WEB server">true</Value>
+                              <Name>WebServer</Name>
+                              <Description>Configure activation of WEB server</Description>
+                            </Parameter>
+                            <Parameter ParameterId="9" type="std:ARRAY[0..5] OF BYTE" IndexInDevDesc="7">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0039_" visiblename="MACAddress" offlineaccess="read" desc="MAC Address">[16#0, 16#0, 16#0, 16#0, 16#0, 16#0]</Value>
+                              <Name>MACAddress</Name>
+                              <Description>MAC Address</Description>
+                            </Parameter>
+                            <Parameter ParameterId="10" type="std:STRING" IndexInDevDesc="8">
+                              <Attributes />
+                              <Value name="_x0031_0" visiblename="NetworkInterfaceName" desc="Configure Name of Network Interface">''</Value>
+                              <Name>NetworkInterfaceName</Name>
+                              <Description>Configure Name of Network Interface</Description>
+                            </Parameter>
+                            <Parameter ParameterId="11" type="localTypes:ProtocolEnumType" IndexInDevDesc="9">
+                              <Attributes />
+                              <Value name="_x0031_1" visiblename="EtherNetProtocol" desc="Configure EtherNet Protocol (Ethernet2 or 802.3 frames)">0</Value>
+                              <Name>EtherNetProtocol</Name>
+                              <Description>Configure EtherNet Protocol (Ethernet2 or 802.3 frames)</Description>
+                            </Parameter>
+                            <Parameter ParameterId="12" type="std:WSTRING" IndexInDevDesc="10">
+                              <Attributes />
+                              <Value name="_x0031_2" visiblename="NetworkInterfaceName" desc="Configure Name of Network Interface - Unicode">""</Value>
+                              <Name>NetworkInterfaceName</Name>
+                              <Description>Configure Name of Network Interface - Unicode</Description>
+                            </Parameter>
+                            <Parameter ParameterId="13" type="std:BOOL" IndexInDevDesc="11">
+                              <Attributes />
+                              <Value name="_x0031_3" visiblename="SaveCommunicationSettings" desc="TRUE: IP, SubnetMask and GatewayAddress will be set to the configured values at the PLC's OS!">false</Value>
+                              <Name>SaveCommunicationSettings</Name>
+                              <Description>TRUE: IP, SubnetMask and GatewayAddress will be set to the configured values at the PLC's OS!</Description>
+                            </Parameter>
+                            <Parameter ParameterId="100" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="12">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_00" visiblename="IPAddress" offlineaccess="read" desc="Actual IP Address of the Controller on the EtherNet bus (IP).">[192, 168, 0, 1]</Value>
+                              <Name>IPAddress</Name>
+                              <Description>Actual IP Address of the Controller on the EtherNet bus (IP).</Description>
+                            </Parameter>
+                            <Parameter ParameterId="101" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="13">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_01" visiblename="SubnetMask" offlineaccess="read" desc="Actual IP Address of the Controller on the EtherNet bus (Mask).">[255, 255, 255, 0]</Value>
+                              <Name>SubnetMask</Name>
+                              <Description>Actual IP Address of the Controller on the EtherNet bus (Mask).</Description>
+                            </Parameter>
+                            <Parameter ParameterId="102" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="14">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_02" visiblename="GatewayAddress" offlineaccess="read" desc="Actual IP Address of the Controller on the EtherNet bus (Gateway).">[0, 0, 0, 0]</Value>
+                              <Name>GatewayAddress</Name>
+                              <Description>Actual IP Address of the Controller on the EtherNet bus (Gateway).</Description>
+                            </Parameter>
+                            <Parameter ParameterId="103" type="localTypes:TransferRateType" IndexInDevDesc="15">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_03" visiblename="TransferRate" offlineaccess="read" desc="Actual Bus speed of the EtherNet.">0</Value>
+                              <Name>TransferRate</Name>
+                              <Description>Actual Bus speed of the EtherNet.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="104" type="localTypes:IPConfigModeType" IndexInDevDesc="16">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_04" visiblename="IPConfigMode" offlineaccess="read" desc="Actual method this device uses for obtaining an IP address.">1</Value>
+                              <Name>IPConfigMode</Name>
+                              <Description>Actual method this device uses for obtaining an IP address.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="105" type="std:STRING" IndexInDevDesc="17">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_05" visiblename="DeviceName" offlineaccess="read" desc="Actual Network-/Device- Name, e.g. for DHCP addressing Use case.">'my Device'</Value>
+                              <Name>DeviceName</Name>
+                              <Description>Actual Network-/Device- Name, e.g. for DHCP addressing Use case.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="106" type="std:BOOL" IndexInDevDesc="18">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_06" visiblename="WebServer" offlineaccess="read" desc="Actual activation state of WEB server">true</Value>
+                              <Name>WebServer</Name>
+                              <Description>Actual activation state of WEB server</Description>
+                            </Parameter>
+                            <Parameter ParameterId="107" type="localTypes:NetworkStatusType" IndexInDevDesc="19">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_07" visiblename="NetworkStatus" offlineaccess="read" desc="Actual network status.">1</Value>
+                              <Name>NetworkStatus</Name>
+                              <Description>Actual network status.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="108" type="localTypes:ModuleStatusType" IndexInDevDesc="20">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_08" visiblename="ModuleStatus" offlineaccess="read" desc="Actual module status.">1</Value>
+                              <Name>ModuleStatus</Name>
+                              <Description>Actual module status.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="109" type="std:ARRAY[0..5] OF BYTE" IndexInDevDesc="21">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_09" visiblename="MACAddress" offlineaccess="read" desc="Actual MAC Address.">[16#0, 16#0, 16#0, 16#0, 16#0, 16#0]</Value>
+                              <Name>MACAddress</Name>
+                              <Description>Actual MAC Address.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="110" type="std:STRING" IndexInDevDesc="22">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_10" visiblename="NetworkInterfaceName" offlineaccess="read" desc="Actual Name of Network Interface">'ether 0'</Value>
+                              <Name>NetworkInterfaceName</Name>
+                              <Description>Actual Name of Network Interface</Description>
+                            </Parameter>
+                            <Parameter ParameterId="111" type="localTypes:ProtocolEnumType" IndexInDevDesc="23">
+                              <Attributes offlineaccess="read" />
+                              <Value name="_x0031_11" visiblename="EtherNetProtocol" offlineaccess="read" desc="Actual configured EtherNet Protocol">0</Value>
+                              <Name>EtherNetProtocol</Name>
+                              <Description>Actual configured EtherNet Protocol</Description>
+                            </Parameter>
+                            <Parameter ParameterId="2006" type="localTypes:EthDiag" IndexInDevDesc="28">
+                              <Attributes channel="diag" offlineaccess="read" onlineaccess="read" />
+                              <Value name="_x0032_006" visiblename="EthDiag" offlineaccess="read" onlineaccess="read" desc="Ethernet diagnostic information">
+                                <Element name="CurrentIP" visiblename="Current IP" />
+                                <Element name="CurrentSubnet" visiblename="Current subnet mask" />
+                                <Element name="CurrentGateway" visiblename="Current gateway address" />
+                                <Element name="IPChanges" visiblename="IP changes" desc="Amount of IP configuration changes since startup (IP or gateway address or subnet mask)" />
+                              </Value>
+                              <Name>EthDiag</Name>
+                              <Description>Ethernet diagnostic information</Description>
+                            </Parameter>
+                            <Parameter ParameterId="2007" type="std:BOOL" IndexInDevDesc="29">
+                              <Attributes channel="diagAck" offlineaccess="none" onlineaccess="none" />
+                              <Value name="_x0032_007" visiblename="Diag Acknowledge" offlineaccess="none" onlineaccess="none" desc="Diag Acknowledge">FALSE</Value>
+                              <Name>Diag Acknowledge</Name>
+                              <Description>Diag Acknowledge</Description>
+                            </Parameter>
+                            <Parameter ParameterId="10000000" type="std:BOOL" IndexInDevDesc="30">
+                              <Attributes offlineaccess="none" />
+                              <Value name="_x0031_0000000" visiblename="WebserverVisible" offlineaccess="none" desc="enable/disable configuration of parameter WebServer">false</Value>
+                              <Name>WebserverVisible</Name>
+                              <Description>enable/disable configuration of parameter WebServer</Description>
+                            </Parameter>
+                            <Parameter ParameterId="10000001" type="std:BOOL" IndexInDevDesc="31">
+                              <Attributes offlineaccess="none" />
+                              <Value name="_x0031_0000001" visiblename="NetworkInterfaceVisible" offlineaccess="none" desc="enable/disable configuration of parameter NetworkInterfaceName">true</Value>
+                              <Name>NetworkInterfaceVisible</Name>
+                              <Description>enable/disable configuration of parameter NetworkInterfaceName</Description>
+                            </Parameter>
+                            <Parameter ParameterId="10000002" type="std:BOOL" IndexInDevDesc="32">
+                              <Attributes download="false" offlineaccess="none" />
+                              <Value name="_x0031_0000002" visiblename="OnlineStatusScreenEnabled" offlineaccess="none" desc="enable/disable Online-Status Screen">false</Value>
+                              <Name>OnlineStatusScreenEnabled</Name>
+                              <Description>enable/disable Online-Status Screen</Description>
+                            </Parameter>
+                            <Parameter ParameterId="10000003" type="std:WSTRING" IndexInDevDesc="33">
+                              <Attributes download="false" offlineaccess="read" />
+                              <Value name="_x0031_0000003" visiblename="ReadOnlyNIC" offlineaccess="read" desc="NIC whose communication settings shall not be changed.">""</Value>
+                              <Name>ReadOnlyNIC</Name>
+                              <Description>NIC whose communication settings shall not be changed.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="10000004" type="std:BOOL" IndexInDevDesc="34">
+                              <Attributes offlineaccess="none" />
+                              <Value name="_x0031_0000004" visiblename="UseAsyncTask" offlineaccess="none" desc="Use async task to check the network connectivity. This relieves the bus cycle task.">true</Value>
+                              <Name>UseAsyncTask</Name>
+                              <Description>Use async task to check the network connectivity. This relieves the bus cycle task.</Description>
+                            </Parameter>
+                            <Parameter ParameterId="20000000" type="std:__XWORD" IndexInDevDesc="35">
+                              <Attributes offlineaccess="none" />
+                              <Value name="_x0032_0000000" visiblename="Dummy Parameter" offlineaccess="none" desc="Dummy Parameter">0</Value>
+                              <Name>Dummy Parameter</Name>
+                              <Description>Dummy Parameter</Description>
+                            </Parameter>
+                            <Parameter ParameterId="805306369" type="std:BOOL" IndexInDevDesc="36">
+                              <Attributes download="false" offlineaccess="none" />
+                              <Value name="_x0038_05306369" visiblename="ShowLoggerPage" offlineaccess="none" desc="Show the logger page for the scanner">true</Value>
+                              <Name>ShowLoggerPage</Name>
+                              <Description>Show the logger page for the scanner</Description>
+                            </Parameter>
+                          </HostParameterSet>
+                        </Connector>
+                        <DeviceParameterSet />
+                      </DeviceType>
+                    </Device>
+                  </data>
+                  <data name="configurations" handleUnknown="discard">
+                    <configurations>
+                      <configuration name="Modbus_TCP_Client_UniversalRobot">
+                        <addData>
+                          <data name="Device" handleUnknown="discard">
+                            <Device xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="">
+                              <DeviceType>
+                                <DeviceIdentification>
+                                  <Type>88</Type>
+                                  <Id>0000 0003</Id>
+                                  <Version>4.5.0.0</Version>
+                                </DeviceIdentification>
+                                <Connector moduleType="88" role="child" interface="Common.Ethernet" connectorId="1">
+                                  <HostParameterSet />
+                                </Connector>
+                                <Connector moduleType="88" interface="Common.ModbusTCPMaster" connectorId="2" hostpath="1">
+                                  <HostParameterSet>
+                                    <Parameter ParameterId="8000" type="std:BOOL" IndexInDevDesc="0">
+                                      <Attributes download="false" offlineaccess="read" />
+                                      <Value name="_x0038_000" visiblename="ExtendedChannelConfig" offlineaccess="read" desc="Use the new Channel-Config format">true</Value>
+                                      <Name>ExtendedChannelConfig</Name>
+                                      <Description>Use the new Channel-Config format</Description>
+                                    </Parameter>
+                                    <Parameter ParameterId="8002" type="std:BOOL" IndexInDevDesc="1">
+                                      <Attributes onlineaccess="read" />
+                                      <Value name="_x0038_002" visiblename="OptimizationOn" onlineaccess="read" desc="the driver optimizes the io update">TRUE</Value>
+                                      <Name>OptimizationOn</Name>
+                                      <Description>the driver optimizes the io update</Description>
+                                    </Parameter>
+                                    <Parameter ParameterId="9001" type="std:UDINT" IndexInDevDesc="2">
+                                      <Attributes />
+                                      <Value name="_x0039_001" visiblename="ResponseTimeOut" desc="Response time in milliseconds">1000</Value>
+                                      <Name>ResponseTimeOut</Name>
+                                      <Description>Response time in milliseconds</Description>
+                                    </Parameter>
+                                    <Parameter ParameterId="9002" type="std:BOOL" IndexInDevDesc="3">
+                                      <Attributes />
+                                      <Value name="_x0039_002" visiblename="AutoReconnect" desc="auto-confirm error and re-establish TCP connection">FALSE</Value>
+                                      <Name>AutoReconnect</Name>
+                                      <Description>auto-confirm error and re-establish TCP connection</Description>
+                                    </Parameter>
+                                    <Parameter ParameterId="9010" type="local:FBInstance" IndexInDevDesc="4">
+                                      <Attributes download="false" offlineaccess="read" />
+                                      <Value name="_x0039_010" visiblename="ModbusTCP Client Instance" offlineaccess="read" desc="Implicit Function Block for Modbus Clients.">
+                                        <Element name="FBType" visiblename="FBType">'ModbusTCPSlaveUnit'</Element>
+                                        <Element name="FBDiagType" visiblename="FBDiagType">'ModbusTCPSlaveUnit_Diag'</Element>
+                                        <Element name="InitMethodName" visiblename="InitMethodName">'Initialize'</Element>
+                                      </Value>
+                                      <Name>ModbusTCP Client Instance</Name>
+                                      <Description>Implicit Function Block for Modbus Clients.</Description>
+                                    </Parameter>
+                                  </HostParameterSet>
+                                </Connector>
+                                <DeviceParameterSet />
+                              </DeviceType>
+                            </Device>
+                          </data>
+                          <data name="configurations" handleUnknown="discard">
+                            <configurations>
+                              <configuration name="Modbus_TCP_Server">
+                                <addData>
+                                  <data name="Device" handleUnknown="discard">
+                                    <Device xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="">
+                                      <DeviceType>
+                                        <DeviceIdentification>
+                                          <Type>89</Type>
+                                          <Id>0000 0005</Id>
+                                          <Version>4.5.0.0</Version>
+                                        </DeviceIdentification>
+                                        <Connector moduleType="89" role="child" interface="Common.ModbusTCPMaster" connectorId="1">
+                                          <HostParameterSet>
+                                            <Parameter ParameterId="8000" type="std:BOOL" IndexInDevDesc="0">
+                                              <Attributes download="false" offlineaccess="read" />
+                                              <Value name="_x0038_000" visiblename="NewChannelConfig" offlineaccess="read" desc="Use the new Channel-Config format">true</Value>
+                                              <Name>NewChannelConfig</Name>
+                                              <Description>Use the new Channel-Config format</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="9100" type="std:USINT" IndexInDevDesc="1">
+                                              <Attributes />
+                                              <Value name="_x0039_100" visiblename="Unit-ID" desc="Unit-ID of the Device">255</Value>
+                                              <Name>Unit-ID</Name>
+                                              <Description>Unit-ID of the Device</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="9101" type="std:DWORD" IndexInDevDesc="2">
+                                              <Attributes />
+                                              <Value name="_x0039_101" visiblename="ResponseTimeout" desc="Maximum time for a Server to respond in ms">1000</Value>
+                                              <Name>ResponseTimeout</Name>
+                                              <Description>Maximum time for a Server to respond in ms</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="9102" type="std:ARRAY[0..3] OF BYTE" IndexInDevDesc="3">
+                                              <Attributes />
+                                              <Value name="_x0039_102" visiblename="IPAddress" desc="Configure IP Address of TCP Server.">[192, 168, 56, 101]</Value>
+                                              <Name>IPAddress</Name>
+                                              <Description>Configure IP Address of TCP Server.</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="9103" type="std:UINT" IndexInDevDesc="4">
+                                              <Attributes />
+                                              <Value name="_x0039_103" visiblename="Port" desc="Port where the Server is listening">502</Value>
+                                              <Name>Port</Name>
+                                              <Description>Port where the Server is listening</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="9200" type="localTypes:ServerDiagT" IndexInDevDesc="5">
+                                              <Attributes channel="diag" offlineaccess="read" onlineaccess="read" />
+                                              <Value name="_x0039_200" visiblename="Server Diag" offlineaccess="read" onlineaccess="read" desc="Server's diagnostic information">
+                                                <Element name="StructVersion" visiblename="Diag Version" offlineaccess="none">1</Element>
+                                                <Element name="ComState" visiblename="ComState" desc="Current State of TCP Connection" />
+                                                <Element name="align" visiblename="align" offlineaccess="none" />
+                                                <Element name="RequestCounter" visiblename="Request Counter" />
+                                                <Element name="ErrorCounter" visiblename="Error Counter" />
+                                                <Element name="LastError" visiblename="Last Error">
+                                                  <Element name="Timestamp" visiblename="Timestamp" />
+                                                  <Element name="ChannelIndex" visiblename="Channel Index">-1</Element>
+                                                  <Element name="ErrorCode" visiblename="Error Code">16#FF</Element>
+                                                </Element>
+                                              </Value>
+                                              <Name>Server Diag</Name>
+                                              <Description>Server's diagnostic information</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="9201" type="std:BOOL" IndexInDevDesc="6">
+                                              <Attributes channel="diagAck" offlineaccess="none" onlineaccess="none" />
+                                              <Value name="_x0039_201" visiblename="Confirm Diagnosis" offlineaccess="none" onlineaccess="none">FALSE</Value>
+                                              <Name>Confirm Diagnosis</Name>
+                                            </Parameter>
+                                            <Parameter ParameterId="17825792" type="localTypes:CHANNEL_PACKED">
+                                              <Attributes />
+                                              <Value name="_x0031_01711872" visiblename="WriteEnable" desc="ChannelConfig">
+                                                <Element name="FunctionCode" visiblename="Function Code">5</Element>
+                                                <Element name="ReadOffset" visiblename="Read Offset">0</Element>
+                                                <Element name="ReadLength" visiblename="Read Length">0</Element>
+                                                <Element name="WriteOffset" visiblename="Write Offset">16#0012</Element>
+                                                <Element name="WriteLength" visiblename="Write Length">1</Element>
+                                                <Element name="Trigger" visiblename="Trigger">5</Element>
+                                                <Element name="CycleTime" visiblename="Cycle Time">100</Element>
+                                                <Element name="ErrorHandling" visiblename="Error Handling">true</Element>
+                                                <Element name="EnableRegisterBitMapping" visiblename="EnableRegisterBitMapping" />
+                                              </Value>
+                                              <Name>WriteEnable</Name>
+                                              <Description>ChannelConfig</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="25296914" type="std:ARRAY[0..0] OF BYTE">
+                                              <Attributes channel="output" />
+                                              <Value name="_x0031_09182994_0_0_0" visiblename="WriteEnable[0]" desc="Write Single Coil">
+                                                <Element name="_x0031_09182994_0_0_0_0" visiblename="Bit0" desc="0x0012">FALSE</Element>
+                                                <Element name="_x0031_09182994_0_0_0_1" visiblename="Bit1" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0031_09182994_0_0_0_2" visiblename="Bit2" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0031_09182994_0_0_0_3" visiblename="Bit3" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0031_09182994_0_0_0_4" visiblename="Bit4" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0031_09182994_0_0_0_5" visiblename="Bit5" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0031_09182994_0_0_0_6" visiblename="Bit6" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0031_09182994_0_0_0_7" visiblename="Bit7" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                              </Value>
+                                              <Name>WriteEnable</Name>
+                                              <Description>Write Single Coil</Description>
+                                              <Mapping>
+                                                <Element name="_x0031_09182994_0_0_0">
+                                                  <Element name="_x0031_09182994_0_0_0_0">Application.IO_Cobot.Cmd_Enable</Element>
+                                                </Element>
+                                              </Mapping>
+                                            </Parameter>
+                                            <Parameter ParameterId="34603008" type="localTypes:CHANNEL_PACKED">
+                                              <Attributes />
+                                              <Value name="_x0036_8157440" visiblename="ReadPositionRegister" desc="ChannelConfig">
+                                                <Element name="FunctionCode" visiblename="Function Code">3</Element>
+                                                <Element name="ReadOffset" visiblename="Read Offset">16#0081</Element>
+                                                <Element name="ReadLength" visiblename="Read Length">1</Element>
+                                                <Element name="WriteOffset" visiblename="Write Offset">0</Element>
+                                                <Element name="WriteLength" visiblename="Write Length">0</Element>
+                                                <Element name="Trigger" visiblename="Trigger">5</Element>
+                                                <Element name="CycleTime" visiblename="Cycle Time">100</Element>
+                                                <Element name="ErrorHandling" visiblename="Error Handling">true</Element>
+                                                <Element name="EnableRegisterBitMapping" visiblename="EnableRegisterBitMapping" />
+                                              </Value>
+                                              <Name>ReadPositionRegister</Name>
+                                              <Description>ChannelConfig</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="38011009" type="std:ARRAY[0..0] OF WORD">
+                                              <Attributes channel="input" />
+                                              <Value name="_x0037_1565343_0_0_0" visiblename="ReadPositionRegister[0]" desc="0x0081">
+                                                <Element name="_x0037_1565343_0_0_0_0" visiblename="Bit0">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_1" visiblename="Bit1">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_2" visiblename="Bit2">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_3" visiblename="Bit3">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_4" visiblename="Bit4">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_5" visiblename="Bit5">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_6" visiblename="Bit6">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_7" visiblename="Bit7">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_8" visiblename="Bit8">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_9" visiblename="Bit9">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_10" visiblename="Bit10">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_11" visiblename="Bit11">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_12" visiblename="Bit12">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_13" visiblename="Bit13">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_14" visiblename="Bit14">FALSE</Element>
+                                                <Element name="_x0037_1565343_0_0_0_15" visiblename="Bit15">FALSE</Element>
+                                              </Value>
+                                              <Name>ReadPositionRegister</Name>
+                                              <Description>Read Holding Registers</Description>
+                                              <Mapping>
+                                                <Element name="_x0037_1565343_0_0_0">Application.IO_Cobot.Sts_TargetPosEcho01mm</Element>
+                                              </Mapping>
+                                            </Parameter>
+                                            <Parameter ParameterId="51380224" type="localTypes:CHANNEL_PACKED">
+                                              <Attributes />
+                                              <Value name="_x0035_1380224" visiblename="WritePositionRegister" desc="ChannelConfig">
+                                                <Element name="FunctionCode" visiblename="Function Code">6</Element>
+                                                <Element name="ReadOffset" visiblename="Read Offset">0</Element>
+                                                <Element name="ReadLength" visiblename="Read Length">0</Element>
+                                                <Element name="WriteOffset" visiblename="Write Offset">16#0080</Element>
+                                                <Element name="WriteLength" visiblename="Write Length">1</Element>
+                                                <Element name="Trigger" visiblename="Trigger">5</Element>
+                                                <Element name="CycleTime" visiblename="Cycle Time">100</Element>
+                                                <Element name="ErrorHandling" visiblename="Error Handling">true</Element>
+                                                <Element name="EnableRegisterBitMapping" visiblename="EnableRegisterBitMapping" />
+                                              </Value>
+                                              <Name>WritePositionRegister</Name>
+                                              <Description>ChannelConfig</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="58982528" type="std:ARRAY[0..0] OF WORD">
+                                              <Attributes channel="output" />
+                                              <Value name="_x0035_8982528_0_0_0" visiblename="WritePositionRegister[0]" desc="0x0080">
+                                                <Element name="_x0035_8982528_0_0_0_0" visiblename="Bit0">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_1" visiblename="Bit1">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_2" visiblename="Bit2">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_3" visiblename="Bit3">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_4" visiblename="Bit4">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_5" visiblename="Bit5">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_6" visiblename="Bit6">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_7" visiblename="Bit7">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_8" visiblename="Bit8">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_9" visiblename="Bit9">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_10" visiblename="Bit10">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_11" visiblename="Bit11">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_12" visiblename="Bit12">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_13" visiblename="Bit13">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_14" visiblename="Bit14">FALSE</Element>
+                                                <Element name="_x0035_8982528_0_0_0_15" visiblename="Bit15">FALSE</Element>
+                                              </Value>
+                                              <Name>WritePositionRegister</Name>
+                                              <Description>Write Single Register</Description>
+                                              <Mapping>
+                                                <Element name="_x0035_8982528_0_0_0">Application.IO_Cobot.Cmd_TargetPos01mm</Element>
+                                              </Mapping>
+                                            </Parameter>
+                                            <Parameter ParameterId="68157440" type="localTypes:CHANNEL_PACKED">
+                                              <Attributes />
+                                              <Value name="_x0033_4603008" visiblename="ReadMovementEndBit" desc="ChannelConfig">
+                                                <Element name="FunctionCode" visiblename="Function Code">1</Element>
+                                                <Element name="ReadOffset" visiblename="Read Offset">16#0011</Element>
+                                                <Element name="ReadLength" visiblename="Read Length">1</Element>
+                                                <Element name="WriteOffset" visiblename="Write Offset">0</Element>
+                                                <Element name="WriteLength" visiblename="Write Length">0</Element>
+                                                <Element name="Trigger" visiblename="Trigger">5</Element>
+                                                <Element name="CycleTime" visiblename="Cycle Time">100</Element>
+                                                <Element name="ErrorHandling" visiblename="Error Handling">true</Element>
+                                                <Element name="EnableRegisterBitMapping" visiblename="EnableRegisterBitMapping" />
+                                              </Value>
+                                              <Name>ReadMovementEndBit</Name>
+                                              <Description>ChannelConfig</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="71434257" type="std:ARRAY[0..0] OF BYTE">
+                                              <Attributes channel="input" />
+                                              <Value name="_x0033_7879825_0_0_0" visiblename="ReadMovementEndBit[0]" desc="Read Coils">
+                                                <Element name="_x0033_7879825_0_0_0_0" visiblename="Bit0" desc="0x0011">FALSE</Element>
+                                                <Element name="_x0033_7879825_0_0_0_1" visiblename="Bit1" offlineaccess="none" desc="Read Coils">FALSE</Element>
+                                                <Element name="_x0033_7879825_0_0_0_2" visiblename="Bit2" offlineaccess="none" desc="Read Coils">FALSE</Element>
+                                                <Element name="_x0033_7879825_0_0_0_3" visiblename="Bit3" offlineaccess="none" desc="Read Coils">FALSE</Element>
+                                                <Element name="_x0033_7879825_0_0_0_4" visiblename="Bit4" offlineaccess="none" desc="Read Coils">FALSE</Element>
+                                                <Element name="_x0033_7879825_0_0_0_5" visiblename="Bit5" offlineaccess="none" desc="Read Coils">FALSE</Element>
+                                                <Element name="_x0033_7879825_0_0_0_6" visiblename="Bit6" offlineaccess="none" desc="Read Coils">FALSE</Element>
+                                                <Element name="_x0033_7879825_0_0_0_7" visiblename="Bit7" offlineaccess="none" desc="Read Coils">FALSE</Element>
+                                              </Value>
+                                              <Name>ReadMovementEndBit</Name>
+                                              <Description>Read Coils</Description>
+                                              <Mapping>
+                                                <Element name="_x0033_7879825_0_0_0">
+                                                  <Element name="_x0033_7879825_0_0_0_0">Application.IO_Cobot.Sts_Done</Element>
+                                                </Element>
+                                              </Mapping>
+                                            </Parameter>
+                                            <Parameter ParameterId="84934656" type="localTypes:CHANNEL_PACKED">
+                                              <Attributes />
+                                              <Value name="_x0031_7825792" visiblename="WriteExecuteBit" desc="ChannelConfig">
+                                                <Element name="FunctionCode" visiblename="Function Code">5</Element>
+                                                <Element name="ReadOffset" visiblename="Read Offset">0</Element>
+                                                <Element name="ReadLength" visiblename="Read Length">0</Element>
+                                                <Element name="WriteOffset" visiblename="Write Offset">16#0010</Element>
+                                                <Element name="WriteLength" visiblename="Write Length">1</Element>
+                                                <Element name="Trigger" visiblename="Trigger">5</Element>
+                                                <Element name="CycleTime" visiblename="Cycle Time">100</Element>
+                                                <Element name="ErrorHandling" visiblename="Error Handling">true</Element>
+                                                <Element name="EnableRegisterBitMapping" visiblename="EnableRegisterBitMapping" />
+                                              </Value>
+                                              <Name>WriteExecuteBit</Name>
+                                              <Description>ChannelConfig</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="92405776" type="std:ARRAY[0..0] OF BYTE">
+                                              <Attributes channel="output" />
+                                              <Value name="_x0032_5296912_0_0_0" visiblename="WriteExecuteBit[0]" desc="Write Single Coil">
+                                                <Element name="_x0032_5296912_0_0_0_0" visiblename="Bit0" desc="0x0010">FALSE</Element>
+                                                <Element name="_x0032_5296912_0_0_0_1" visiblename="Bit1" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0032_5296912_0_0_0_2" visiblename="Bit2" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0032_5296912_0_0_0_3" visiblename="Bit3" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0032_5296912_0_0_0_4" visiblename="Bit4" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0032_5296912_0_0_0_5" visiblename="Bit5" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0032_5296912_0_0_0_6" visiblename="Bit6" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                                <Element name="_x0032_5296912_0_0_0_7" visiblename="Bit7" offlineaccess="none" desc="Write Single Coil">FALSE</Element>
+                                              </Value>
+                                              <Name>WriteExecuteBit</Name>
+                                              <Description>Write Single Coil</Description>
+                                              <Mapping>
+                                                <Element name="_x0032_5296912_0_0_0">
+                                                  <Element name="_x0032_5296912_0_0_0_0">Application.IO_Cobot.Cmd_Start</Element>
+                                                </Element>
+                                              </Mapping>
+                                            </Parameter>
+                                            <Parameter ParameterId="101711872" type="localTypes:CHANNEL_PACKED">
+                                              <Attributes />
+                                              <Value name="_x0038_4934656" visiblename="ReadHeartbeat" desc="ChannelConfig">
+                                                <Element name="FunctionCode" visiblename="Function Code">3</Element>
+                                                <Element name="ReadOffset" visiblename="Read Offset">16#0082</Element>
+                                                <Element name="ReadLength" visiblename="Read Length">1</Element>
+                                                <Element name="WriteOffset" visiblename="Write Offset">0</Element>
+                                                <Element name="WriteLength" visiblename="Write Length">0</Element>
+                                                <Element name="Trigger" visiblename="Trigger">5</Element>
+                                                <Element name="CycleTime" visiblename="Cycle Time">100</Element>
+                                                <Element name="ErrorHandling" visiblename="Error Handling">true</Element>
+                                                <Element name="EnableRegisterBitMapping" visiblename="EnableRegisterBitMapping" />
+                                              </Value>
+                                              <Name>ReadHeartbeat</Name>
+                                              <Description>ChannelConfig</Description>
+                                            </Parameter>
+                                            <Parameter ParameterId="105119874" type="std:ARRAY[0..0] OF WORD">
+                                              <Attributes channel="input" />
+                                              <Value name="_x0038_8342658_0_0_0" visiblename="ReadHeartbeat[0]" desc="0x0082">
+                                                <Element name="_x0038_8342658_0_0_0_0" visiblename="Bit0">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_1" visiblename="Bit1">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_2" visiblename="Bit2">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_3" visiblename="Bit3">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_4" visiblename="Bit4">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_5" visiblename="Bit5">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_6" visiblename="Bit6">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_7" visiblename="Bit7">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_8" visiblename="Bit8">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_9" visiblename="Bit9">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_10" visiblename="Bit10">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_11" visiblename="Bit11">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_12" visiblename="Bit12">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_13" visiblename="Bit13">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_14" visiblename="Bit14">FALSE</Element>
+                                                <Element name="_x0038_8342658_0_0_0_15" visiblename="Bit15">FALSE</Element>
+                                              </Value>
+                                              <Name>ReadHeartbeat</Name>
+                                              <Description>Read Holding Registers</Description>
+                                              <Mapping>
+                                                <Element name="_x0038_8342658_0_0_0">Application.IO_Cobot.Sts_Heartbeat</Element>
+                                              </Mapping>
+                                            </Parameter>
+                                            <Parameter ParameterId="1879052288" type="std:UDINT" IndexInDevDesc="7">
+                                              <Attributes offlineaccess="read" onlineaccess="read" />
+                                              <Value name="_x0031_879052288" visiblename="ConfigVersion" offlineaccess="read" onlineaccess="read">16#03050B00</Value>
+                                              <Name>ConfigVersion</Name>
+                                            </Parameter>
+                                          </HostParameterSet>
+                                        </Connector>
+                                        <Connector moduleType="95" interface="Common.ModbusSerialGateway" connectorId="2" hostpath="1">
+                                          <HostParameterSet />
+                                        </Connector>
+                                        <DeviceParameterSet />
+                                      </DeviceType>
+                                    </Device>
+                                  </data>
+                                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                                    <ObjectId>5491e88c-d2dc-44af-862c-dcbb7dd63b38</ObjectId>
+                                  </data>
+                                </addData>
+                              </configuration>
+                            </configurations>
+                          </data>
+                          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                            <ObjectId>2036ce6c-0adb-418c-ad08-b605163a7ae6</ObjectId>
+                          </data>
+                        </addData>
+                      </configuration>
+                    </configurations>
+                  </data>
+                  <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+                    <ObjectId>d2448405-5221-48e0-bf18-8d725fad72c4</ObjectId>
+                  </data>
+                </addData>
+              </configuration>
+            </configurations>
+          </data>
+          <data name="http://www.3s-software.com/plcopenxml/objectid" handleUnknown="discard">
+            <ObjectId>5f43c93c-bda0-463a-9a92-244054505c81</ObjectId>
+          </data>
+        </addData>
+      </configuration>
+    </configurations>
+  </instances>
+  <addData>
+    <data name="http://www.3s-software.com/plcopenxml/projectstructure" handleUnknown="discard">
+      <ProjectStructure>
+        <Object Name="Device" ObjectId="5f43c93c-bda0-463a-9a92-244054505c81">
+          <Object Name="Application" ObjectId="caa0251e-0c57-4cd7-96f2-c583ceadd520">
+            <Object Name="Library Manager" ObjectId="72187021-3f8d-45d5-bbc7-182ce8bb0209" />
+            <Object Name="PLC_PRG" ObjectId="fca93f2e-06de-42f3-8528-1719cc99a366">
+              <Object Name="InitPous" ObjectId="68873a1c-9b07-4c5b-abbc-4ab445fc9305" />
+            </Object>
+            <Object Name="MainTask" ObjectId="92a9c841-26fa-439d-97a9-1157e3fe3eff" />
+            <Folder Name="POU">
+              <Object Name="FB_FunctionBlock_Base" ObjectId="148afabd-380a-438f-87ea-5bf7be8d1247">
+                <Object Name="Reset" ObjectId="852b4299-c9da-4fcd-938b-d1d5036f2055" />
+                <Object Name="RaiseError" ObjectId="08579cc0-bc3d-4829-a9a1-674e64300dc4" />
+                <Object Name="GetError" ObjectId="0e76d0ed-0f92-493f-bad0-d3ff893862a1" />
+                <Object Name="ClearError" ObjectId="5ec9f487-c2fa-4569-9f34-4ac1fa3c04f6" />
+                <Object Name="HasError" ObjectId="ee897d5b-b836-47b8-96e9-74e3a1369bdb" />
+              </Object>
+              <Folder Name="Job_Handler">
+                <Object Name="FB_JobManager" ObjectId="ab6b24a1-115c-4903-a6b4-976c8399b636">
+                  <Object Name="Reset" ObjectId="63fe4d37-25c8-40dc-ad10-2ef6453ad5f8" />
+                  <Object Name="Init" ObjectId="d7ca0b86-6794-4a47-9803-daffb35999bd" />
+                  <Object Name="DisableAll" ObjectId="997eb126-0ce4-4a1b-a3dd-74157243ac39" />
+                  <Object Name="EnableAll" ObjectId="63ad21e2-1101-42cb-8c92-a31884fa40d5" />
+                  <Object Name="ResetAll" ObjectId="04266275-37f7-4b00-8a3d-02d5507b2310" />
+                  <Object Name="CheckErrors" ObjectId="9355f896-5f5c-4300-8cea-015bd956ba3d" />
+                  <Object Name="RunJob" ObjectId="51e60925-b383-4e15-b1de-e6afd67af44b" />
+                </Object>
+                <Object Name="FB_JobSelector" ObjectId="9c1e931b-5792-473d-be29-2f0583139f7b">
+                  <Object Name="Reset" ObjectId="cbd08f19-6982-4ef4-bd1a-0a35c7e8ba88" />
+                  <Object Name="ReturnScrew" ObjectId="ff93f8f8-acec-49fd-87a4-70498c3d70aa" />
+                  <Object Name="SelectNextScrew" ObjectId="c7da85f4-ea83-437d-8cba-00e7c245e299" />
+                </Object>
+                <Object Name="FB_ReportJob" ObjectId="76bea8b0-b98f-473e-a6f2-8c6a1fb10753">
+                  <Object Name="Reset" ObjectId="569f013c-b790-41f6-b044-cb890783effc" />
+                  <Object Name="JobEnd" ObjectId="284905ec-208e-4294-bd67-87021c2d24c4" />
+                  <Object Name="SuccessScrew" ObjectId="e58ee6ee-2499-41dd-97a4-75431f8f86c1" />
+                  <Object Name="FailScrew" ObjectId="96cc8508-73e4-4d70-879e-320b6c3a8669" />
+                  <Object Name="JobStart" ObjectId="15a1d42a-11c8-4ee8-b02d-78264e3b9715" />
+                  <Object Name="JobAborted" ObjectId="22be6d26-dccf-400d-92dd-f94d055726f2" />
+                  <Object Name="AddSink" ObjectId="a8ccc1b4-e674-4343-b493-c5b0ff3b6a05" />
+                  <Object Name="SendReportToSinks" ObjectId="79033d9a-9aeb-432e-adf3-74ea5e73fab6" />
+                  <Object Name="Now" ObjectId="70cdd813-2e08-4220-8294-84bba62a8fa7" />
+                </Object>
+                <Object Name="ErrorCodeToString" ObjectId="2f7b0045-0ce3-4af1-bbd8-da0bb8772a8a" />
+                <Object Name="FB_LogSink" ObjectId="590cfc8d-48b9-4767-8871-bb6878323fd1">
+                  <Object Name="PublishReport" ObjectId="2415bb07-8eda-40eb-9739-9949ed8e793e" />
+                </Object>
+                <Object Name="Trace" ObjectId="5f1b161d-19f6-4490-8bbf-59fe8ab8c336" />
+              </Folder>
+              <Folder Name="User_Interface">
+                <Object Name="FB_UserInterface" ObjectId="4604bc88-3068-485d-a32d-07ee0f934538">
+                  <Object Name="Reset" ObjectId="bd270192-195e-45f4-bb54-9e746884302a" />
+                  <Object Name="IsStartRequired" ObjectId="ba4c53d1-5b15-4800-a2f7-3e665d95b5fb" />
+                  <Object Name="IsStopRequired" ObjectId="1d552d34-3b24-4dfe-bc58-315491414854" />
+                </Object>
+              </Folder>
+              <Folder Name="Actuators">
+                <Object Name="FB_ConveyorElectrical" ObjectId="aed87809-29af-4be9-9e79-86ce516b4e99">
+                  <Object Name="Reset" ObjectId="3ba490a2-70e8-46e6-b5d0-9d6e797cc8d7" />
+                  <Object Name="MoveToPosition" ObjectId="a89604ee-9883-4fb5-b54e-1a21f20b7860" />
+                  <Object Name="Enable" ObjectId="15e55061-f326-4ad7-8d02-fee028162f61" />
+                  <Object Name="Disable" ObjectId="65956a08-0bd7-4c9a-9e33-68ac0a2c3371" />
+                </Object>
+                <Object Name="FB_zAxis" ObjectId="6d9119b4-2fd2-4377-aeac-b8563c4156c4">
+                  <Object Name="Reset" ObjectId="c262b068-96bc-4f94-abea-71b7e33c652e" />
+                  <Object Name="Engage" ObjectId="e1cbb33f-14a2-452a-b4e8-164ef14f6c67" />
+                  <Object Name="Retract" ObjectId="d6366a9e-920a-4079-be94-fdcc4264ad2d" />
+                </Object>
+                <Object Name="FB_Spindle" ObjectId="651ae768-fee6-4563-8b27-eaf8b9d2f730">
+                  <Object Name="Reset" ObjectId="9db809f6-8883-4137-be28-d8f099a2cd88" />
+                  <Object Name="ProcessTool" ObjectId="09ca33af-99da-4206-87d5-f45b2177e0f6" />
+                  <Object Name="Enable" ObjectId="07fe7c73-f094-4167-89e6-1ec7aa338a18" />
+                  <Object Name="Disable" ObjectId="80efe083-945d-4a9e-ab8b-57078f56156d" />
+                </Object>
+                <Object Name="FB_Cobot" ObjectId="b1067154-e2a8-4758-bbab-d29073d87995">
+                  <Object Name="Reset" ObjectId="ebd30bfc-d34d-42d3-8a4b-744716105477" />
+                  <Object Name="MoveToPosition" ObjectId="378573e2-b579-42c5-8b08-9bc278900838" />
+                  <Object Name="Enable" ObjectId="5ce8a02f-5599-4b4c-ae15-907232cf3c8b" />
+                  <Object Name="Disable" ObjectId="fe2ad5e7-15e5-4e6d-be46-21aa4ca121bd" />
+                </Object>
+              </Folder>
+              <Folder Name="Interface">
+                <Object Name="I_Actuator" ObjectId="f8ec156e-3ce9-4ba0-a8d7-e940f68973cf">
+                  <Object Name="Enable" ObjectId="269813ba-515d-490c-97ed-ee0e76e75812" />
+                  <Object Name="Disable" ObjectId="70bc2f0a-0f49-4339-81aa-d0447048fd3e" />
+                </Object>
+                <Object Name="I_Mover" ObjectId="ad8c6094-07c3-4656-a342-2c1e333b6b84">
+                  <Object Name="MoveToPosition" ObjectId="876de298-6e06-47a2-98d4-7ec2e158635c" />
+                </Object>
+                <Object Name="I_Tool" ObjectId="bda6e85b-d6ef-4775-8b48-deaba307d471">
+                  <Object Name="ProcessTool" ObjectId="ab27b7eb-6cfb-4fc1-a2e1-d2cea6c20d07" />
+                </Object>
+                <Object Name="I_Resettable" ObjectId="0c2b962b-c6c2-4c3a-a46a-9d0fd4dc31ed">
+                  <Object Name="Reset" ObjectId="eb5a17be-41b4-417a-af3c-f8192b06e9d8" />
+                </Object>
+                <Object Name="I_Diagnosable" ObjectId="ac3b8d12-ea7c-4c6b-bd25-ef3baa2347b6">
+                  <Object Name="GetError" ObjectId="09128ea1-d8fc-44d1-a13e-22acd308a866" />
+                  <Object Name="ClearError" ObjectId="70d36d2c-9183-47e4-9a79-16e178518588" />
+                </Object>
+                <Object Name="I_ReportSink" ObjectId="67133bc1-a5d8-4609-b029-8a7ff8f2da9e">
+                  <Object Name="PublishReport" ObjectId="55d1aa6b-e70a-4be3-92b9-73b19edd90ba" />
+                </Object>
+                <Object Name="I_Device" ObjectId="3a0b964b-3f45-4f8d-a6f7-3a1765ec6cfd" />
+              </Folder>
+            </Folder>
+            <Folder Name="DUT">
+              <Object Name="JobState" ObjectId="071466ac-fe42-4c23-89f7-87ec700cf39a" />
+              <Object Name="Screw" ObjectId="495e2ff8-decc-49db-a2e6-51cebb6007db" />
+              <Object Name="ErrorCode" ObjectId="a155c2e2-1bc8-4772-8ae0-3cb89ef4cdf5" />
+              <Object Name="ActionResult" ObjectId="0160df29-0768-4498-9ef7-f91f43b4e2f4" />
+              <Object Name="IO_Cobot" ObjectId="944d4228-f282-433d-aae0-668553c7039c" />
+              <Object Name="MoverState" ObjectId="adcfd35c-2cfe-4a43-9c93-e03cacdfd834" />
+              <Object Name="JobReport" ObjectId="4ca4f405-5ed1-4052-8598-7d774caf68a1" />
+              <Object Name="Machine_Constants" ObjectId="c32908f8-03b3-4382-b0af-5fa6b655d859" />
+              <Object Name="ScrewList" ObjectId="a5990c35-9050-434b-9f56-c1f04826e5dc" />
+            </Folder>
+            <Folder Name="Plant_Simulation">
+              <Object Name="PRG_PlantSim" ObjectId="392460d5-d7dc-4594-a367-43e28566d65c" />
+              <Object Name="IO_Simulation" ObjectId="8e6e23dc-8c7b-4975-a793-8c3597d6796e" />
+            </Folder>
+          </Object>
+          <Object Name="Ethernet" ObjectId="d2448405-5221-48e0-bf18-8d725fad72c4">
+            <Object Name="Modbus_TCP_Client_UniversalRobot" ObjectId="2036ce6c-0adb-418c-ad08-b605163a7ae6">
+              <Object Name="Modbus_TCP_Server" ObjectId="5491e88c-d2dc-44af-862c-dcbb7dd63b38" />
+            </Object>
+          </Object>
+        </Object>
+      </ProjectStructure>
+    </data>
+  </addData>
+</project>
